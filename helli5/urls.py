@@ -13,12 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include, handler400, handler403, handler404, handler500
+from django.urls import path, re_path, include
+from django.conf.urls import handler400, handler403, handler404, handler500
 from django.contrib import admin
-from django.urls import path
 from . import views
 # import postingApp
-import loginApp
+# import loginApp
 from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
@@ -52,13 +52,13 @@ urlpatterns = [
     path('students_list/<challenge_id>/', students_list, name='pansouq_students'),
     # path('error503/', views.error503, name='error503'),
     # path('djrichtextfield/', include('djrichtextfield.urls')),
-    url(r'^tinymce/', include('tinymce.urls')),
+    re_path(r'^tinymce/', include('tinymce.urls')),
 
-    url(r'^حساب-ها/', include('loginApp.urls')),
-    url(r'^نوشته-ها/', include('postingApp.urls')),
-    url(r'^افتخارات/', include('honorsApp.urls')),
-    url(r'panel/', include('smsApp.urls')),
-    url(r'^courses/', include('courseApp.urls')),
-    url(r'^آموزش-آنلاین/', include('eLearning.urls')),
-    url(r'^پژوهشی/', include('pansouqApp.urls')),
+    re_path(r'^حساب-ها/', include('loginApp.urls')),
+    re_path(r'^نوشته-ها/', include('postingApp.urls')),
+    re_path(r'^افتخارات/', include('honorsApp.urls')),
+    re_path(r'panel/', include('smsApp.urls')),
+    re_path(r'^courses/', include('courseApp.urls')),
+    re_path(r'^آموزش-آنلاین/', include('eLearning.urls')),
+    re_path(r'^پژوهشی/', include('pansouqApp.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

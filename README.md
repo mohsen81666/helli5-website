@@ -75,31 +75,31 @@ $ sudo pip3 install -r requirements.txt
 in order to run this project you need to install few packages which its listed below
 
 
-1)python 3.7
+1)python 3.11
 ```
 $ sudo apt-get update
-$ sudo apt-get install python3.7
+$ sudo apt-get install python3.11
 ```
 2)pip
 ```
-$ sudo apt install python3-pip
+$ sudo apt install python-pip
 
 ```
 prerequisites packages install with below command
 ```
-$ sudo pip3 install -r requirements.txt 
+$ sudo pip install -r requirements.txt
 ```
 
 <!-- Running the Project Locally -->
 ### Running the Project Locally
 First, clone the repository to your local machine:
 ```
-$ git clone git@github.com:TheMn/internet-engineering-project.git
+$ git clone https://github.com/mohsen81666/helli5-website.git
 ```
 Create the database
 ```
 $ python manage.py makemigrations
-$ python manage.py migrate
+$ python manage.py migrate [--run-syncdb]
 ```
 Finally, run the development server
 ```

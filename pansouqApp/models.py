@@ -3,7 +3,6 @@ from django.contrib.auth import get_user_model
 from django_jalali.db import models as jmodels
 import os
 from django.core.validators import MaxValueValidator, MinValueValidator
-from jalali_date.admin import AdminJalaliDateWidget
 
 User = get_user_model()
 

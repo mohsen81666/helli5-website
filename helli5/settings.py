@@ -21,10 +21,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-import locale
+# import locale
 
-LANGUAGE_CODE = 'fa-ir'
-# locale.setlocale(locale.LC_ALL, "fa_IR.UTF-8")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,9 +35,9 @@ SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 SECRET_KEY = '=yp)45*4+9-2mtl28v^cmv&#k4!#c_*9ncf#2q1pm4qp+f4w)4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['www.allamehelli5.ir', 'allamehelli5.ir', '37.152.189.163']
+ALLOWED_HOSTS = ['www.allamehelli5.ir', 'allamehelli5.ir', '37.152.189.163', '127.0.0.1']
 
 # Application definition
 
@@ -58,7 +56,6 @@ INSTALLED_APPS = [
     'crispy_forms',
     'tinymce',
     'django_jalali',
-    'jalali_date',
     'paymentApp',
     'eLearning',
     'pansouqApp',
@@ -106,6 +103,8 @@ DATABASES = {
     }
 }
 
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -127,7 +126,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fa-ir'
+# locale.setlocale(locale.LC_ALL, "fa_IR.UTF-8")
+
+# LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Tehran'
 
