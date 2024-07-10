@@ -24,7 +24,7 @@ from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 from postingApp.feeds import LatestPostsFeed
-from loginApp.views import pre_registration
+from loginApp.views import pre_registeration
 from loginApp.views import export_pre_registrations
 from pansouqApp.views import students_list
 
@@ -47,8 +47,8 @@ urlpatterns = [
     path('bunch_add', views.bunch_add_model, name='bunch_add'),
     # path('export', views.export, name='export'),
 
-    path('پیش-ثبت-نام/', pre_registration, name='pre_registration'),
-    path('complete/<melli>', pre_registration, name='compelete_form'),
+    path('pre-registeration/', pre_registeration, name='pre_registeration'),
+    path('pre-registeration/<melli>/<ssid>', pre_registeration, name='compelete_pre_registeration'),
     path('students_list/<challenge_id>/', students_list, name='pansouq_students'),
     # path('error503/', views.error503, name='error503'),
     # path('djrichtextfield/', include('djrichtextfield.urls')),

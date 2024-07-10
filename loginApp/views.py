@@ -3,7 +3,7 @@ from django.contrib.auth import login as auth_login
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.views.decorators.csrf import csrf_protect
-from .forms import SignUpForm, LoginForm, PreRegistrationFrom
+from .forms import SignUpForm, LoginForm, PreRegisterationFrom
 from helli5.decorators import unauth_user
 from django.contrib import messages
 import xlwt
@@ -32,36 +32,35 @@ def profile(request):
 
 @csrf_protect
 @unauth_user
-def pre_registration(request, melli=None):
+def pre_registeration(request, melli=None, ssid=None):
     url = None
-    form = PreRegistrationFrom()
-    if melli is not None:
-        form = PreRegistrationFrom(instance=PreRegisteredStudent.objects.get(melli_code=melli))
+    form = PreRegisterationFrom()
+    if melli is not None and ssid is not None:
+        try:
+            form = PreRegisterationFrom(instance=PreRegisteredStudent.objects.get(melli_code=melli, ss_id=ssid))
+        except ObjectDoesNotExist:
+            messages.warning(request, 'چنین فرمی قبلاً پر نشده است.')
     elif request.method == 'POST':
-        form = PreRegistrationFrom(request.POST)
+        form = PreRegisterationFrom(request.POST)
         if form.is_valid():
-            valid = False
-            if request.POST.get('submit') == 'final_registration':
-                valid = True
             try:
                 PreRegisteredStudent.objects.get(melli_code=form.cleaned_data['melli_code']).delete()
             except ObjectDoesNotExist:
                 pass
             finally:
                 obj = form.save(commit=False)
-                obj.is_valid = valid
+                obj.is_valid = True
                 obj.save()
-                if valid:
-                    messages.success(request,
-                                     'مشخصات وارد شده در سامانه ثبت شد و برای پیگیری منتظر اطلاعیه‌های بعدی باشید..')
-                else:
-                    url = "http://allamehelli5.ir/complete/" + form.cleaned_data['melli_code']
-                    messages.warning(request,
-                                     'اطلاعات شما موقتا در سیستم ثبت گردید،‌ برای تکمبل اطلاعات و ثبت نهایی حتما باید از طریق لینک زیر اقدام فرمایید:')
+                # TODO: URL should be independent from domain
+                # url = "http://allamehelli5edu.ir/pre-registeration/" + form.cleaned_data['melli_code'] + "/" + form.cleaned_data['ss_id']
+                url = "http://127.0.0.1:8000/pre-registeration/" + form.cleaned_data['melli_code'] + "/" + form.cleaned_data['ss_id']
+                messages.success(request, 'مشخصات وارد شده در سامانه ثبت شد و برای پیگیری منتظر اطلاعیه‌های بعدی باشید.')
+                messages.success(request, 'برای تغییر اطلاعات فرم پیش ثبت نام می توانید از لینک زیر استفاده کنید. این لینک را برای استفاده های بعدی در جایی یادداشت کنید یا آن را در مرورگر خود نشانگذاری(bookmark) کنید.')
         else:
             messages.warning(request, 'متاسفانه اطلاعات وارد شده معتبر نبوده و در سامانه ثبت نشد')
+
     context = {
-        'pre_registration_form': form,
+        'pre_registeration_form': form,
         'complete_url': url
     }
     return render(request, 'pre_registeration.html', context)
