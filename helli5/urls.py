@@ -37,6 +37,7 @@ urlpatterns = [
 
     path('', views.index, name='index'),
     path('export-pres/', export_pre_registrations, name='export-pres'),
+    path('export-pres/<year>', export_pre_registrations, name='export-pres'),
 
     path('admin/', admin.site.urls),
     path('feed/rss', LatestPostsFeed(), name='posts_feed'),
