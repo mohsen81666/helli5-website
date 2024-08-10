@@ -1,19 +1,18 @@
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.views.decorators.csrf import csrf_protect
-from .forms import SignUpForm, LoginForm, PreRegisterationFrom
-from helli5.decorators import unauth_user
-from django.contrib import messages
 import xlwt
-from django.db.utils import IntegrityError
-from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.decorators import login_required
+from helli5.decorators import unauth_user
 from paymentApp.models import Debt
-from django.http import HttpResponse
 from .models import PreRegisteredStudent
-
+from .forms import SignUpForm, LoginForm, PreRegisterationFrom
 
 @login_required(login_url='login')
 def profile(request):
@@ -52,8 +51,7 @@ def pre_registeration(request, melli=None, ssid=None):
                 obj.is_valid = True
                 obj.save()
                 # TODO: URL should be independent from domain
-                url = "http://allamehelli5edu.ir/pre-registeration/" + form.cleaned_data['melli_code'] + "/" + form.cleaned_data['ss_id']
-                # url = "http://127.0.0.1:8000/pre-registeration/" + form.cleaned_data['melli_code'] + "/" + form.cleaned_data['ss_id']
+                url = "http://" + settings.SITE_URL +  "/pre-registeration/" + form.cleaned_data['melli_code'] + "/" + form.cleaned_data['ss_id']
                 messages.success(request, 'مشخصات وارد شده در سامانه ثبت شد و برای پیگیری منتظر اطلاعیه‌های بعدی باشید.')
                 messages.success(request, 'برای تغییر اطلاعات فرم پیش ثبت نام می توانید از لینک زیر استفاده کنید. این لینک را برای استفاده های بعدی در جایی یادداشت کنید یا آن را در مرورگر خود نشانگذاری(bookmark) کنید.')
         else:

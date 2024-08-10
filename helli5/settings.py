@@ -86,7 +86,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'helli5.contextprocessor.time_now',
+                'helli5.context_processors.site_url',
             ],
         },
     },
@@ -130,8 +130,6 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'fa-ir'
 # locale.setlocale(locale.LC_ALL, "fa_IR.UTF-8")
 
-# LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'Asia/Tehran'
 
 USE_I18N = True
@@ -145,7 +143,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-SITE_URL = 'www.allamehelli5.ir'
+SITE_URL = 'allamehelli5edu.ir'
+# SITE_URL = '127.0.0.1:8000'
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATICFILES_DIRS = [
