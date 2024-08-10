@@ -20,3 +20,7 @@ svg.bi {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
+
+.elearning_logo {
+  height: 100px;
+}

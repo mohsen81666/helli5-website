@@ -41,6 +41,13 @@ def index(request):
     }
     return render(request, 'index.html', context)
 
+def elearning(request):
+    context = {
+        'moodle_url': 'https://lms.' + settings.SITE_URL,
+        'telegram_url': 'https://t.me/allamehelli5',
+        'aparat_url': 'https://www.aparat.com/allamehelli5',
+    }
+    return render(request, 'elearning.html', context)
 
 # def footer(request):
 #     events = Event.objects.order_by('-date')[0:6]

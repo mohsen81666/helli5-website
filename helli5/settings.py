@@ -58,7 +58,6 @@ INSTALLED_APPS = [
     'tinymce',
     'django_jalali',
     'paymentApp',
-    'eLearning',
     'pansouqApp',
     'smsApp'
 ]

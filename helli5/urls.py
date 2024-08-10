@@ -36,6 +36,8 @@ handler500 = views.custom_500
 urlpatterns = [
 
     path('', views.index, name='index'),
+    path('elearning', views.elearning, name='elearning'),
+
     path('export-pres/', export_pre_registrations, name='export-pres'),
     path('export-pres/<year>', export_pre_registrations, name='export-pres'),
 
@@ -60,6 +62,5 @@ urlpatterns = [
     re_path(r'^افتخارات/', include('honorsApp.urls')),
     re_path(r'panel/', include('smsApp.urls')),
     re_path(r'^courses/', include('courseApp.urls')),
-    re_path(r'^آموزش-آنلاین/', include('eLearning.urls')),
     re_path(r'^پژوهشی/', include('pansouqApp.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

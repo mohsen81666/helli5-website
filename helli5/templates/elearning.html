@@ -1,16 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block title %} آموزش مجازی | وبسایت دبیرستان دوره دوم علامه حلی ۵ تهران {% endblock %}
 {% block meta_description %}آموزش مجازی از راه دور دبیرستان متوسطه دوم علامه حلی ۵ سمپاد تیزهوشان تهران{% endblock %}
+
 {% block content %}
 
 <main class="p-3">
-    {% if perms.loginApp.check_classes %}
-    <div class="text-center mb-3">
-        <a href="{% url 'check_classes' %}" class="btn btn-secondary">حضور و
-            غیاب</a>
-    </div>
-    {% endif %}
 
     <div class="card text-center">
         <div class="card-header">
@@ -19,8 +15,7 @@
         <div class="card-body">
             <h5 class="card-title text-center">Adobe Connect</h5>
             <figure class="figure">
-                <img src="{% static '/images/adobe-connect-logo.png' %}" class="figure-img img-fluid rounded"
-                    style="height: 100px" alt="ادوبی کانکت">
+                <img src="{% static '/images/adobe-connect-logo.png' %}" class="elearning_logo figure-img img-fluid rounded" alt="ادوبی کانکت">
                 <figcaption class="figure-caption card-text text-center">
                     از نرم افزار ادوبی کانکت، جهت برگزاری کلاس ها، وبینارها و آموزش الکترونیک دبیرستان علامه حلی ۵
                     استفاده می‌شود.
@@ -32,8 +27,6 @@
                 <li>حضور و غیاب مکانیزه</li>
                 <li>مشارکت کلاسی از طریق گفتگو، طرح پرسش و نظرسنجی</li>
             </div>
-            <a href="http://online.allamehelli5.ir/" class="btn btn-outline-success">کلاس های آنلاین حلی
-                ۵</a>
         </div>
     </div>
     <div class="card text-center" style="margin-top: 10px">
@@ -43,8 +36,7 @@
         <div class="card-body">
             <h5 class="card-title text-center">Moodle (CMS)</h5>
             <figure class="figure">
-                <img src="{% static '/images/moodle-logo.png' %}" class="figure-img img-fluid rounded"
-                    style="height: 100px" alt="مودل">
+                <img src="{% static '/images/moodle-logo.png' %}" class="elearning_logo figure-img img-fluid rounded" alt="مودل">
                 <figcaption class="figure-caption card-text text-center">
                     بهره گیری از درس افزار مودل در دبیرستان علامه حلی ۵، به ایجاد فضای تعاملی بین دبیران و دانش
                     آموزان کمک می کند.
@@ -56,9 +48,7 @@
                 <li>برگزاری آزمون های تستی و تشریحی</li>
                 <li>مشاهده ی نمره ها و بازخورد دبیران</li>
             </div>
-            <a href="http://lms.allamehelli5.ir/" class="btn btn-outline-dark">سامانه
-                دروس حلی
-                ۵</a>
+            <a href="{{ moodle_url }}" class="btn btn-outline-dark">سامانه دروس حلی۵</a>
         </div>
     </div>
     <div class="card text-center" style="margin-top: 10px">
@@ -68,11 +58,13 @@
         <div class="card-body">
             <h5 class="card-title text-center">Telegram / Bale</h5>
             <figure class="figure">
-                <img src="{% static '/images/telegram-logo.png' %}" class="figure-img img-fluid rounded"
-                    style="height: 100px" alt="تلگرام">
+                <a href="{{ telegram_url }}">
+                    <img src="{% static '/images/telegram-logo.png' %}" class="elearning_logo figure-img img-fluid rounded" alt="تلگرام">
+                </a>
                 <img src="{% static '/images/bale-logo.png' %}" class="figure-img img-fluid rounded"
                     style="height: 95px" alt="بله">
                 <figcaption class="figure-caption card-text text-center">
+                    <h5 dir="ltr">@allamehelli5</h5><br>
                     جدیدترین اخبار و اطلاعیه های دبیرستان علامه حلی ۵، به صورت همگام سازی شده در پیام رسان های
                     تلگرام و بله منتشر می شود.
                 </figcaption>
@@ -81,10 +73,7 @@
                 <li>اطلاع از موارد مهم تقویم آموزشی/پژوهشی/المپیاد</li>
                 <li>گروه های درسی برای رفع اشکال و تبادل نظر بین دانش آموزان و دبیران</li>
                 <li>ربات تلگرامی برای برگزاری آزمون شفاهی</li>
-                {# <li></li>#}
             </div>
-            <a href="https://t.me/allamehelli5" class="btn btn-outline-info">کانال
-                تلگرامی حلی ۵</a>
         </div>
     </div>
     <div class="card text-center" style="margin-top: 10px">
@@ -94,8 +83,7 @@
         <div class="card-body">
             <h5 class="card-title text-center">Aparat</h5>
             <figure class="figure">
-                <img src="{% static '/images/aparat-logo.png' %}" class="figure-img img-fluid rounded"
-                    style="height: 100px" alt="آپارات">
+                <img src="{% static '/images/aparat-logo.png' %}" class="elearning_logo figure-img img-fluid rounded" alt="آپارات">
                 <figcaption class="figure-caption card-text text-center">
                     دسترسی به برخی ویدئوهای دبیرستان علامه حلی ۵، از طریق کانال آپارات این مرکز امکان پذیر است.
                 </figcaption>
@@ -105,7 +93,7 @@
                 <li>لیست های پخش به تفکیک دروس</li>
                 <li>انتشار جلسات و آموزش های مهم</li>
             </div>
-            <a href="https://www.aparat.com/allamehelli5" class="btn btn-outline-danger">صفحه آپارات حلی ۵</a>
+            <a href="{{ aparat_url }}" class="btn btn-outline-danger">صفحه آپارات حلی ۵</a>
         </div>
     </div>
 </main>
