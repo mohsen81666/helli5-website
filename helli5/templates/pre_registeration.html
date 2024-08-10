@@ -26,6 +26,7 @@
     {% endif %}
     {% if not messages %}
         <div dir="rtl" style="background: rgba(0,0,0,0.75); color: white; border-radius: 0 20px 0 20px;">
+            {% comment %} TODO: توضیح اینکه فقط دانش آموزان سمپادی فرم را پر کنند. {% endcomment %}
             <p class="m-3">در پر کردن فرم پیش ثبت نام به موارد زیر توجه داشته باشید:<br>
                 - پرکردن فیلدهای ستاره دار اجباری است، البته توصیه می‌کنیم همه فیلدهایی که اطلاعات آنها را دارید پر کنید.<br>
                 - ثبت نهایی در وبسایت مدرسه به منزله‌ی پایان مراحل ثبت نام نیست و برای تکمیل مدارک لازم است
@@ -78,9 +79,11 @@
                             <div class="col-lg-1" style="align-items: center">
                                 {% comment %} filler {% endcomment %}
                             </div>
+                            {% comment %} TODO: melli code should be valid latin number {% endcomment %}
                             <div class="col-lg-5 mt-2">
                                 {{ pre_registeration_form.melli_code|as_crispy_field }}
                             </div>
+                            {% comment %} TODO: ss_id should be valid latin number {% endcomment %}
                             <div class="col-lg-3 col-md-6 mt-2">
                                 {{ pre_registeration_form.ss_id|as_crispy_field }}
                             </div>
@@ -114,9 +117,11 @@
                             <div class="col-sm-6 mt-2">
                                 {{ pre_registeration_form.grade_at_9th|as_crispy_field }}
                             </div>
+                            {% comment %} TODO: اضافه کردن شکل قبولی در سمپاد، انتخاب مدرسه بر اساس آن {% endcomment %}
                             <div class="col-sm-6 mt-2">
                                 {{ pre_registeration_form.last_year_school_name|as_crispy_field }}
                             </div>
+                            {% comment %} TODO: اضافه کردن پایه، برای انتقالی های میان پایه {% endcomment %}
                             <div class="col-lg-4 mt-2">
                                 {{ pre_registeration_form.field_of_study|as_crispy_field }}
                             </div>
