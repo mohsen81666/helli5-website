@@ -20,6 +20,14 @@ class PreRegisterationFrom(ModelForm):
         # required = '__all__'
 
 
+class SetOwnPasswordForm(forms.Form):
+    password1 = forms.CharField(label=_(u"رمز عبور جدید"),
+                                widget=forms.PasswordInput)
+    password2 = forms.CharField(label=_(u"تایید رمز عبور"),
+                                widget=forms.PasswordInput,
+                                help_text=_("رمز عبور را دوباره وارد کنید."))
+
+
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=50, required=False)
     email = forms.EmailField(max_length=50, required=True)
@@ -43,7 +51,7 @@ class SignUpForm(UserCreationForm):
     img = forms.ImageField(required=False)
 
     class Meta:
-        User._meta.get_field('email')._unique = True
+        # User._meta.get_field('email')._unique = True
         model = User
         fields = (
             'username', 'first_name', 'last_name', 'phone', 'email', 'password1', 'password2', 'birth_date', 'img',)

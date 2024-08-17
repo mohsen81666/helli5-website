@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
@@ -11,8 +12,8 @@ from django.views.decorators.csrf import csrf_protect
 import xlwt
 from helli5.decorators import unauth_user
 from paymentApp.models import Debt
-from .models import PreRegisteredStudent
-from .forms import SignUpForm, LoginForm, PreRegisterationFrom
+from .models import PreRegisteredStudent, SetOwnPassword
+from .forms import LoginForm, SignUpForm, SetOwnPasswordForm, PreRegisterationFrom
 
 @login_required(login_url='login')
 def profile(request):
@@ -73,10 +74,22 @@ def login(request):
         if request.POST.get('submit') == 'ورود':
             login_form = LoginForm(request.POST or None)
             if login_form.is_valid():
+                # get authenticated user
                 user = login_form.login(request)
+
+                # Check if user changed his one time entry password and if not, redirect him to set password
+                try:
+                    set_own_password = SetOwnPassword.objects.get(user=user)
+                except SetOwnPassword.DoesNotExist:
+                    set_own_password = None
+                if not(set_own_password and set_own_password.is_set):
+                    request.session['username'] = user.username
+                    return redirect('set-own-password')
+
                 if user:
+                    # login user and redirect to panel
                     auth_login(request, user)
-                    return redirect('profile')
+                    return redirect('user-panel')
 
         elif request.POST.get('submit') == 'ثبت نام':
             signup_form = SignUpForm(request.POST)
@@ -99,6 +112,31 @@ def login(request):
     }
     return render(request, 'login.html', context)
 
+
+@csrf_protect
+@unauth_user
+def set_own_password(request):
+    set_password_form = None
+    if request.method == "POST":
+        username = request.session.get('username')
+        set_password_form = SetOwnPasswordForm(request.POST)
+        if set_password_form.is_valid():
+            raw_password1 = set_password_form.cleaned_data.get('password1')
+            raw_password2 = set_password_form.cleaned_data.get('password2')
+            print(raw_password1, raw_password2)
+            if raw_password1 == raw_password2:
+                user = User.objects.get(username=username)
+                user.set_password(raw_password1)
+                user.save()
+                try:
+                    set_own_password = SetOwnPassword.objects.get(user=user)
+                except SetOwnPassword.DoesNotExist:
+                    set_own_password = SetOwnPassword(user=user, is_set=False)
+                set_own_password.is_set = True
+                set_own_password.save()
+            return redirect('login')
+
+    return render(request, 'set_own_password.html', context={'set_password': set_password_form})
 
 def export_pre_registrations(request, year=None):
     user = request.user

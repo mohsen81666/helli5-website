@@ -5,6 +5,11 @@ from django.dispatch import receiver
 
 User = get_user_model()
 
+# Add a field to user to check if users changed their one time entry password
+class SetOwnPassword(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    is_set = models.BooleanField(default=False)
+
 
 class PreRegisteredStudent(models.Model):
 

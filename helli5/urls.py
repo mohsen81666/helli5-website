@@ -17,8 +17,6 @@ from django.urls import path, re_path, include
 from django.conf.urls import handler400, handler403, handler404, handler500
 from django.contrib import admin
 from . import views
-# import postingApp
-# import loginApp
 from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
@@ -57,7 +55,7 @@ urlpatterns = [
     # path('djrichtextfield/', include('djrichtextfield.urls')),
     re_path(r'^tinymce/', include('tinymce.urls')),
 
-    re_path(r'^حساب-ها/', include('loginApp.urls')),
+    re_path(r'^accounts/', include('loginApp.urls')),
     re_path(r'^نوشته-ها/', include('postingApp.urls')),
     re_path(r'^افتخارات/', include('honorsApp.urls')),
     re_path(r'panel/', include('smsApp.urls')),
