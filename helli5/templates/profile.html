@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block title %} پنل کاربری | وبسایت دبیرستان دوره دوم علامه حلی ۵ تهران {% endblock %}
+
 {% block content %}
 <header class="hero">
-    <div class="hero-image" style="background-image: url({% static '/images/کتابخانه-دبیرستان-علامه-حلی۵.jpg' %})">
-    </div>
+    <div class="hero-image" style="background-image: url({% static '/images/کتابخانه-دبیرستان-علامه-حلی۵.jpg' %})"></div>
     <h1 class="display-3">
         پنل کاربری
         ({{ user.first_name }} {{ user.last_name }})
@@ -14,72 +15,23 @@
 <section>
     <div class="container py-5">
         <div class="row d-flex align-items-stretch no-gutters">
-            <div class="col-md-3 order-md-last bg-light">
-                <img class="card-img-top" src="{{ user.profile.img.url }}">
-                <div class="card-body">
-                    <h5 class="card-title text-center">{{ user.first_name }} {{ user.last_name }}</h5>
-                    <p class="card-text text-center">({{ user.username }})</p>
-                </div>
-                <ul class="list-group list-group-flush text-center">
-                    <li class="list-group-item">
-                        {% if user.profile.grade == '10' %}پایه
-                        دهم{% elif user.profile.grade == '11' %}پایه یازدهم{% elif user.profile.grade == '12' %}پایه
-                        دوازدهم{% else %}کاربر ویژه{% endif %}
-                    </li>
-                    <li class="list-group-item">{{ user.profile.phone }}</li>
-                </ul>
-                <div class="card-body text-right" dir="rtl">
-                    <ul>
-                        {% if perms.courseApp.see_reports %}
-                        <li><a href="{% url 'studentReports' %}" class="card-link">کارنامه ها</a></li>
-                        {% endif %}
-                        <li><a href="{% url 'logout' %}" class="card-link">خروج</a></li>
-                    </ul>
-                </div>
-            </div>
+            {% include 'user_sidebar.html' %}
             <div class="col-md-9 text-center p-5">
-                {% if payment_url %}
-                <p class="btn btn-secondary m-auto" onclick="window.location='{{ payment_url }}'">پرداخت بدهی</p>
-                <br>
-                <br>
+                {% if not user.is_superuser %}
+                    <h3>خوش آمدید</h3>
+                {% else %}
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <a href="{% url 'export-pres' %}">خروجی پیش ثبت نامی ها - کل</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{% url 'export-pres-current' '2024' %}">خروجی پیش ثبت نامی ها - سال جاری</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{% url 'bunch-add' %}">اضافه کردن گروهی کاربرها</a>
+                        </li>
+                    </ul>
                 {% endif %}
-                <table class="table table-hover">
-                    <thead><strong>لینک های دسترسی به سامانه های آموزش آنلاین</strong></thead>
-                    <tbody>
-                        <tr class="table-warning" style="cursor: pointer"
-                            onclick="window.location='https://online.allamehelli5.ir/h10r/';">
-                            <td>کلاس های آنلاین دهم ریاضی</td>
-                        </tr>
-                        <tr class="table-warning" style="cursor: pointer"
-                            onclick="window.location='https://online.allamehelli5.ir/h10t/';">
-                            <td>کلاس های آنلاین دهم تجربی</td>
-                        </tr>
-                        <tr class="table-info" style="cursor: pointer"
-                            onclick="window.location='https://online.allamehelli5.ir/h11r/';">
-                            <td>کلاس های آنلاین یازدهم ریاضی</td>
-                        </tr>
-                        <tr class="table-info" style="cursor: pointer"
-                            onclick="window.location='https://online.allamehelli5.ir/h11t/';">
-                            <td>کلاس های آنلاین یازدهم تجربی</td>
-                        </tr>
-                        <tr class="table-secondary" style="cursor: pointer"
-                            onclick="window.location='https://online.allamehelli5.ir/h12r/';">
-                            <td>کلاس های آنلاین دوازدهم ریاضی</td>
-                        </tr>
-                        <tr class="table-secondary" style="cursor: pointer"
-                            onclick="window.location='https://online.allamehelli5.ir/h12t/';">
-                            <td>کلاس های آنلاین دوازدهم تجربی</td>
-                        </tr>
-                        <tr class="table-danger" style="cursor: pointer"
-                            onclick="window.location='https://online.allamehelli5.ir/webinars/';">
-                            <td>کلاس عمومی ۱ (وبینار ها)</td>
-                        </tr>
-                        <tr class="table-danger" style="cursor: pointer"
-                            onclick="window.location='https://online.allamehelli5.ir/hfc/';">
-                            <td>کلاس عمومی ۲ (آزاد)</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>

@@ -16,17 +16,10 @@ from .models import PreRegisteredStudent, SetOwnPassword
 from .forms import LoginForm, SignUpForm, SetOwnPasswordForm, PreRegisterationFrom
 
 @login_required(login_url='login')
-def profile(request):
-    user = request.user
-    try:
-        debt = Debt.objects.get(user=user.id)
-        url = 'https://idpay.ir/allamehelli5?amount=' + str(debt.amount)
-    except:
-        url = None
+def user_panel(request):
+    # user = request.user
 
-    context = {
-        "payment_url": url
-    }
+    context = {}
     return render(request, 'profile.html', context)
 
 

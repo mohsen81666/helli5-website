@@ -1,0 +1,35 @@
+<div class="col-md-3 order-md-last bg-light">
+    <img class="card-img-top" src="{{ user.profile.img.url }}">
+    <div class="card-body">
+        <h5 class="card-title text-center">{{ user.first_name }} {{ user.last_name }}</h5>
+        <p class="card-text text-center">({{ user.username }})</p>
+    </div>
+    <ul class="list-group list-group-flush text-center">
+        <li class="list-group-item">
+            {% if user.profile.grade == '10' %}
+                پایه دهم
+            {% elif user.profile.grade == '11' %}
+                پایه یازدهم
+            {% elif user.profile.grade == '12' %}
+                پایه دوازدهم
+            {% elif user.is_superuser %}
+                کاربر ویژه
+            {% else %}
+                کاربر
+            {% endif %}
+        </li>
+        <li class="list-group-item">{{ user.profile.phone }}</li>
+    </ul>
+    <div class="card-body text-right" dir="rtl">
+        <ul>
+        {% if perms.courseApp.see_reports %}
+            <li>
+                <a href="{% url 'studentReports' %}" class="card-link">کارنامه ها</a>
+            </li>
+        {% endif %}
+        <li>
+            <a href="{% url 'logout' %}" class="card-link">خروج</a>
+        </li>
+        </ul>
+    </div>
+</div>

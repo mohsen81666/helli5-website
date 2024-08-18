@@ -48,8 +48,7 @@
                     <a class="nav-link" href="{% url 'teachers' %}">دبیران</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" id="navbarDropdown">آرشیو
-                        مطالب</a>
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" id="navbarDropdown">آرشیو مطالب</a>
                     <ul class="dropdown-menu bg-light">
                         <li><a href="{% url 'blog' %}" class="dropdown-item">همه</a></li>
                         <li><a href="{% url 'blog' tag='مدیریت' %}" class="dropdown-item">مدیریت</a></li>
@@ -62,17 +61,17 @@
                     <a class="nav-link" href="{% url 'contact' %}">ارتباط با ما</a>
                 </li>
                 {% if perms.courseApp.add_report %}
-                <li class="nav-item"><a href="{% url 'report' %}" class="nav-link">بارگذاری کارنامه‌ها</a></li>
+                    <li class="nav-item"><a href="{% url 'report' %}" class="nav-link">بارگذاری کارنامه‌ها</a></li>
                 {% endif %}
                 {% if perms.courseApp.see_reports %}
-                <li class="nav-item"><a href="{% url 'studentReports' %}" class="nav-link">کارنامه‌ها</a></li>
+                    <li class="nav-item"><a href="{% url 'studentReports' %}" class="nav-link">کارنامه‌ها</a></li>
                 {% endif %}
                 <li class="nav-item">
-                    <a href="{% url 'profile' %}" class="nav-link">
+                    <a href="{% url 'user-panel' %}" class="nav-link">
                         {%if not user.is_authenticated %}
-                        پنل کاربری
+                            پنل کاربری
                         {% else %}
-                        پنل کاربری ({{ user.last_name }})
+                            پنل کاربری ({{ user.last_name }})
                         {% endif %}
                     </a>
                 </li>
