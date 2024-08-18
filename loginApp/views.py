@@ -11,7 +11,6 @@ from django.template import loader
 from django.views.decorators.csrf import csrf_protect
 import xlwt
 from helli5.decorators import unauth_user
-from paymentApp.models import Debt
 from .models import PreRegisteredStudent, SetOwnPassword
 from .forms import LoginForm, SignUpForm, SetOwnPasswordForm, PreRegisterationFrom
 

@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     'crispy_forms',
     'tinymce',
     'django_jalali',
-    'paymentApp',
     'pansouqApp',
     'smsApp'
 ]
