@@ -17,24 +17,7 @@
         <div class="row d-flex align-items-stretch no-gutters">
             {% include 'user_sidebar.html' %}
             <div class="col-md-9 text-center p-5">
-                {% if not user.is_superuser %}
-                    <h3>خوش آمدید</h3>
-                {% else %}
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <a href="{% url 'export-pres' %}">خروجی پیش ثبت نامی ها - کل</a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="{% url 'export-pres-current' '2024' %}">خروجی پیش ثبت نامی ها - سال جاری</a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="{% url 'bunch-add' %}">اضافه کردن گروهی کاربرها</a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="{% url 'report' %}">بارگذاری کارنامه‌ها</a>
-                        </li>
-                    </ul>
-                {% endif %}
+                <h3>خوش آمدید</h3>
             </div>
         </div>
     </div>

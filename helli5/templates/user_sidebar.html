@@ -1,4 +1,4 @@
-<div class="col-md-3 order-md-last bg-light">
+<div class="col-md-3 order-md-last bg-light" style="border-radius: 20px">
     <img class="card-img-top" src="{{ user.profile.img.url }}">
     <div class="card-body">
         <h5 class="card-title text-center">{{ user.first_name }} {{ user.last_name }}</h5>
@@ -27,9 +27,23 @@
                 <a href="{% url 'studentReports' %}" class="card-link">کارنامه ها</a>
             </li>
         {% endif %}
-        <li>
-            <a href="{% url 'logout' %}" class="card-link">خروج</a>
-        </li>
+        {% if user.is_superuser %}
+            <li class="card-link">
+                <a href="{% url 'report' %}">بارگذاری کارنامه‌ها</a>
+            </li>
+            <li class="card-link">
+                <a href="{% url 'bunch-add' %}">اضافه کردن گروهی کاربرها</a>
+            </li>
+            <li class="card-link">
+                <a href="{% url 'export-pres' %}">خروجی پیش ثبت نامی ها - کل</a>
+            </li>
+            <li class="card-link">
+                <a href="{% url 'export-pres-current' '2024' %}">خروجی پیش ثبت نامی ها - سال جاری</a>
+            </li>
+        {% endif %}
+            <li>
+                <a href="{% url 'logout' %}" class="card-link">خروج</a>
+            </li>
         </ul>
     </div>
 </div>
