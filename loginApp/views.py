@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_protect
 import xlwt
 from helli5.decorators import unauth_user
 from .models import PreRegisteredStudent, SetOwnPassword
-from .forms import LoginForm, SignUpForm, SetOwnPasswordForm, PreRegisterationFrom
+from .forms import LoginForm, SignUpForm, SetOwnPasswordForm, SetOneTimeEntryPassword, PreRegisterationFrom
 
 @login_required(login_url='login')
 def user_panel(request):
@@ -108,14 +108,12 @@ def login(request):
 @csrf_protect
 @unauth_user
 def set_own_password(request):
-    set_password_form = None
+    set_password_form = SetOwnPasswordForm(request.POST or None)
     if request.method == "POST":
         username = request.session.get('username')
-        set_password_form = SetOwnPasswordForm(request.POST)
         if set_password_form.is_valid():
             raw_password1 = set_password_form.cleaned_data.get('password1')
             raw_password2 = set_password_form.cleaned_data.get('password2')
-            print(raw_password1, raw_password2)
             if raw_password1 == raw_password2:
                 user = User.objects.get(username=username)
                 user.set_password(raw_password1)
@@ -129,6 +127,32 @@ def set_own_password(request):
             return redirect('login')
 
     return render(request, 'set_own_password.html', context={'set_password': set_password_form})
+
+
+@csrf_protect
+def set_oneTimeEntry_password(request):
+    user = request.user
+    if user.is_authenticated and user.username == 'admin':
+        set_password_form = SetOneTimeEntryPassword(request.POST or None)
+        if request.method == "POST":
+            if set_password_form.is_valid():
+                username = set_password_form.cleaned_data.get('username')
+                raw_password = set_password_form.cleaned_data.get('password')
+                try:
+                    user = User.objects.get(username=username)
+                except User.DoesNotExist:
+                    set_password_form.errors['error'] = 'کاربر یافت نشد.'
+                    return render(request, 'set_oneTimeEntry_password.html', context={'set_password_form': set_password_form})
+                user.set_password(raw_password)
+                user.save()
+                set_own_password = SetOwnPassword.objects.get(user=user)
+                set_own_password.is_set = False
+                set_own_password.save()
+
+                return redirect('user-panel')
+
+    return render(request, 'set_oneTimeEntry_password.html', context={'set_password_form': set_password_form})
+
 
 def export_pre_registrations(request, year=None):
     user = request.user

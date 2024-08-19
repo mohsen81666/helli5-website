@@ -28,6 +28,11 @@ class SetOwnPasswordForm(forms.Form):
                                 help_text=_("رمز عبور را دوباره وارد کنید."))
 
 
+class SetOneTimeEntryPassword(forms.Form):
+    username = forms.CharField(label=_(u"نام کاربری"), required=True)
+    password = forms.CharField(label=_(u"گذرواژه یک بار مصرف"), required=True)
+
+
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=50, required=False)
     email = forms.EmailField(max_length=50, required=True)
