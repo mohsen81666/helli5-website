@@ -17,29 +17,26 @@
 
 <main class="py-5">
 
-    {% for group_name, group_teachers in groups.items %}
+    {% for name, group in groups.items %}
+    {% if group|length > 0 %}
     <section class="container">
         <h2 class="mb-3">
-            {% if group_name == "سایر" %}
-            سایر گروه ها
-            {% else %}
-            گروه {{ group_name }}
-            {% endif %}
+            گروه {{ name }}
         </h2>
         <div class="row container">
-            {% for profile in group_teachers %}
+            {% for profile in group %}
             <div class="col col-12 col-md-6 col-lg-4">
                 <div class="py-3">
                     <div class="row gx-0">
                         <div class="col col-auto" style="width: 100px">
                             <div class="ratio" style="--bs-aspect-ratio: 133.33%">
-                                <img src="{{ profile.img.url }}" alt="عکس {{ profile.user.first_name }} {{ profile.user.last_name }}" class="rounded">
+                                <img src="{{ profile.img.url }}" alt="عکس {{ profile.first_name }} {{ profile.last_name }}" class="rounded">
                             </div>
                         </div>
                         <div class="col">
                             <div class="ps-3">
-                                <h5>{{ profile.user.first_name }} {{ profile.user.last_name }}</h5>
-                                <h6 class="text-secondary">{{ profile.job_title }}</h6>
+                                <h5>{{ profile.first_name }} {{ profile.last_name }}</h5>
+                                <h6 class="text-secondary">{{ profile.title }}</h6>
                                 <p class="text-muted">{{ profile.description }}</p>
                             </div>
                         </div>
@@ -49,6 +46,7 @@
             {% endfor %}
         </div>
     </section>
+    {% endif %}
     {% endfor %}
 </main>
 

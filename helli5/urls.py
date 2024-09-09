@@ -45,7 +45,7 @@ urlpatterns = [
     path('ارتباط-با-ما/', views.contact, name='contact'),
     path('درباره-ما/', views.about, name='about'),
     path('کنکور/', views.konkour, name='konkour'),
-    path('دبیران/', views.teachers, name='teachers'),
+    path('teachers/', views.teachers, name='teachers'),
     # path('export', views.export, name='export'),
 
     path('pre-registeration/', pre_registeration, name='pre_registeration'),

@@ -1,18 +1,19 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from helli5 import settings
+from .models import *
+from .forms import *
 from postingApp.models import PostStuff, Event
 from loginApp.models import Profile, Contact
 from django.db.models import Q
-from loginApp.forms import ContactForm
 from dynamicApp.models import SliderContent
+from loginApp.models import Profile
+from loginApp.forms import ContactForm
 import os
-from helli5 import settings
-from django.shortcuts import render, redirect
-from .forms import BunchAddForm
-from django.http import HttpResponse
 import xlrd
 import xlwt
-from loginApp.models import Profile
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -87,27 +88,15 @@ def about(request):
 
 
 def teachers(request):
-    math_teachers = Profile.objects.filter(group='math')
-    phys_teachers = Profile.objects.filter(group='phys')
-    chem_teachers = Profile.objects.filter(group='chem')
-    bio_teachers = Profile.objects.filter(group='bio')
-    comp_teachers = Profile.objects.filter(group='comp')
-    eng_teachers = Profile.objects.filter(group='eng')
-    far_teachers = Profile.objects.filter(group='far')
-    other_teachers = Profile.objects.filter(group='other')
+    departments = Department.objects.all().order_by('order')
+    profiles = TeacherProfile.objects.all()
 
-    groups = {
-        'ریاضی': math_teachers,
-        'زیست': bio_teachers,
-        'فیزیک': phys_teachers,
-        'شیمی': chem_teachers,
-        'کامپیوتر': comp_teachers,
-        'زبان': eng_teachers,
-        'فارسی': far_teachers,
-        'سایر': other_teachers,
-    }
+    groups = {}
+    for department in departments:
+        groups[department.name] = [p for p in profiles if p.department == department]
+
     context = {
-        'groups': groups
+        'groups': groups,
     }
     return render(request, 'teachers.html', context)
 
