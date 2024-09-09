@@ -89,7 +89,7 @@ def about(request):
 
 def teachers(request):
     departments = Department.objects.all().order_by('order')
-    profiles = TeacherProfile.objects.all()
+    profiles = TeacherProfile.objects.filter(active=True)
 
     groups = {}
     for department in departments:
