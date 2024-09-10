@@ -15,6 +15,6 @@ class TeacherProfile(models.Model):
     img = models.ImageField(upload_to='profilePic', default="/profilePic/default.png")
     title = models.CharField(verbose_name='عنوان', max_length=50)
     description = models.CharField(verbose_name='توضیحات', max_length=200)
-    department = models.ForeignKey(Department, on_delete=models.RESTRICT)
+    department = models.ForeignKey(Department, on_delete=models.DO_NOTHING)
     active = models.BooleanField(default=True)
 
