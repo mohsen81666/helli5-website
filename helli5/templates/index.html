@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load jformat %}
+{% load filters %}
 
 {% block content %}
 <header class="carousel slide" id="headerCarousel" data-bs-ride="carousel">
@@ -34,7 +35,7 @@
 <main>
     <div class="container my-5">
         <div class="row gx-lg-5">
-            <div class="col col-12 col-lg-9">
+            <div class="col">
                 <h2 class="h1 mb-4">نوشته‌ها</h2>
                 <div class="row g-3">
                     {% for post in latest_posts %}
@@ -63,15 +64,24 @@
                     </div>
                 </div>
             </div>
-            <div class="col pt-5 pt-lg-0">
-                <h2 class="h1">رویدادها</h2>
+            {% if events %}
+            <div class="col pt-5">
+                <h3 class="mt-2 mb-2">رویدادهای پیش رو</h3>
                 {% for event in events %}
-                {% ifchanged event.order %}
-                <h5 class="mt-4 text-body">{{event.day}}</h5>
-                {% endifchanged %}
-                <div class="text-muted ms-1">{{event.text}}</div>
+                    {% ifchanged event.date.month %}
+                        <h5 class="mt-3 text-body">{{ event.date.month|persian_month_name }}</h5>
+                    {% endifchanged %}
+                    <div class="text-muted ms-2">
+                    {% if event.link %}
+                        <a href="{{ event.link }}">{{ event.title }}</a>
+                    {% else %}
+                        {{ event.title }}
+                    {% endif %}
+                    </div>
                 {% endfor %}
+                <a href="{% url 'events' %}" class="btn btn-primary mt-3">همه رویدادها</a>
             </div>
+            {% endif %}
         </div>
     </div>
 </main>

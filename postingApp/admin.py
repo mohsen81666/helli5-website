@@ -1,21 +1,16 @@
 from django.contrib import admin
-from django_jalali.admin.filters import JDateFieldListFilter
 import django_jalali.admin as jadmin
 
 from .models import *
 
 
+@admin.register(PostStuff)
 class PostStuffAdmin(admin.ModelAdmin):
     exclude = ('slug',)
     list_display = ('title', 'username', 'date', 'featured')
     search_fields = ('title',)
     list_filter = ('featured',)
 
-
-admin.site.register(PostStuff, PostStuffAdmin)
-
-
-# Register your models here.
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
@@ -25,15 +20,12 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    ordering = ['order']
-    list_display = ('order', 'text', 'day',)
-    list_editable = ('text', 'day',)
-    list_filter = ('day',)
-    search_fields = ('text',)
+    ordering = ['date']
+    list_display = ('title', 'date', 'description', 'link')
+    list_editable = ('date',)
+    list_filter = ('date',)
+    search_fields = ('title',)
 
-
-# admin.site.register(Comment)
-# admin.site.register(Event)
 
 admin.site.register(Attachment)
 
@@ -44,4 +36,5 @@ class CategoryAdmin(admin.ModelAdmin):
     list_editable = ('is_honored',)
     list_filter = ('is_honored',)
     search_fields = ('title',)
+
 # admin.site.register(Category)

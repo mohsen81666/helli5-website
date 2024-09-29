@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load filters %}
+
+{% block title %} رویدادها | وبسایت دبیرستان دوره دوم علامه حلی ۵ تهران {% endblock %}
+
+{% block content %}
+
+<header class="hero">
+    <div class="hero-image" style="background-image: url({% static 'images/راهرو-دبیرستان-علامه-حلی۵.jpg' %});"></div>
+    <h1 class="display-3">رویدادها</h1>
+</header>
+
+<main class="container pt-3 pt-md-5 mb-5">
+    
+    <table class="table table-striped">
+        {% for event in past_events %}
+        {% ifchanged event.date.month %}
+        <tr class="table-muted">
+            <th colspan='2' class="text-center">{{ event.date.month|persian_month_name }}</th>
+        </tr>
+        {% endifchanged %}
+        <tr>
+            <th scope="row" class="col-3 text-muted">
+                {% if event.link %}
+                    <a href="{{ event.link }}">{{ event.title }}</a>
+                {% else %}
+                    {{ event.title }}
+                {% endif %}
+            </th>
+            <td>{{ event.description }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <hr />
+    <table class="table table-striped">
+        <tr class="table-info">
+            <th colspan='2' class="text-center">{{ current_events.0.date.month|persian_month_name }}</th>
+        </tr>
+        {% for event in current_events %}
+        <tr>
+            <th scope="row" class="col-3 {% if event.date < today %}text-muted{% endif %}">
+                {% if event.link %}
+                    <a href="{{ event.link }}">{{ event.title }}</a>
+                {% else %}
+                    {{ event.title }}
+                {% endif %}
+            </th>
+            <td>{{ event.description }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <hr />
+    <table class="table table-striped">
+        {% for event in future_events %}
+        {% ifchanged event.date.month %}
+        <tr class="table-primary">
+            <th colspan='2' class="text-center">{{ event.date.month|persian_month_name }}</th>
+        </tr>
+        {% endifchanged %}
+        <tr>
+            <th scope="row" class="col-3">
+                {% if event.link %}
+                    <a href="{{ event.link }}">{{ event.title }}</a>
+                {% else %}
+                    {{ event.title }}
+                {% endif %}
+            </th>
+            <td>{{ event.description }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</main>
+
+{% endblock %}

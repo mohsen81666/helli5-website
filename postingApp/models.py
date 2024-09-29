@@ -69,9 +69,10 @@ class PostStuff(models.Model):
 
 
 class Event(models.Model):
-    text = models.CharField(max_length=64, blank=False)
-    day = models.CharField(max_length=64, blank=True)
-    order = models.IntegerField(blank=False, default=-1)
+    title = models.CharField(verbose_name='عنوان', max_length=64, blank=False)
+    date = jmodels.jDateField(verbose_name='تاریخ', blank=False)
+    description = models.TextField(verbose_name='شرح', max_length=256, null=True, blank=True)
+    link = models.CharField(verbose_name='لینک', max_length=128, null=True, blank=True)
 
 
 # @receiver(post_save, sender=PostStuff)

@@ -12,4 +12,6 @@ urlpatterns = [
     re_path(r'^(?P<slug>[\w-]+)/$', blog_single, name='blog_single'),
     # url(r'^(?P<slug>[\w-]+)/update/$', blog_update, name='blog_update'),
     # url(r'^(?P<slug>[\w-]+)/delete/$', blog_delete, name='blog_delete'),
+    path('events', events, name='events'),
+
 ]

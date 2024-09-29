@@ -4,11 +4,12 @@ from django.urls import reverse
 
 from .forms import PageForm, CommentForm
 from django.utils.timezone import now
-from .models import PostStuff, Comment, Category, Profile
+from .models import PostStuff, Comment, Category, Profile, Event
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models.functions import Extract
 from django.db.models import Count, Q
+import jdatetime
 
 
 # def get_archive_count():
@@ -155,3 +156,17 @@ def add_post(request):
 
 # def add_post_teacher(request):
 #     return render(request, 'add_post_teacher.html', {})
+
+
+def events(request):
+    events = Event.objects.all().order_by('date')
+    past_events = [e for e in events if e.date.month < jdatetime.date.today().month]
+    current_events = [e for e in events if e.date.month == jdatetime.date.today().month]
+    future_events = [e for e in events if e.date.month > jdatetime.date.today().month]
+    context = {
+        'past_events': past_events,
+        'current_events': current_events,
+        'future_events': future_events,
+        'today': jdatetime.date.today(),
+    }
+    return render(request, 'events.html', context)

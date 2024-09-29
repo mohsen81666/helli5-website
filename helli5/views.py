@@ -14,6 +14,7 @@ from loginApp.forms import ContactForm
 import os
 import xlrd
 import xlwt
+import jdatetime
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -32,12 +33,10 @@ def index(request):
     #             pass
     slider_contents = SliderContent.objects.filter(Q(visible=True)).order_by('-date')[0:6]
     latest = PostStuff.objects.order_by('-date')[0:6]
-    events = Event.objects.filter(~Q(order=-1)).order_by('order')
-    top_events = Event.objects.filter(order=-1)
+    events = Event.objects.filter(date__gte=jdatetime.date.today()).order_by('date')
     context = {
         'latest_posts': latest,
         'events': events,
-        'top_events': top_events,
         'slider_contents': slider_contents
     }
     return render(request, 'index.html', context)

@@ -56,7 +56,7 @@ urlpatterns = [
     re_path(r'^tinymce/', include('tinymce.urls')),
 
     re_path(r'^accounts/', include('loginApp.urls')),
-    re_path(r'^نوشته-ها/', include('postingApp.urls')),
+    re_path(r'^posts/', include('postingApp.urls')),
     re_path(r'^افتخارات/', include('honorsApp.urls')),
     re_path(r'panel/', include('smsApp.urls')),
     re_path(r'^courses/', include('courseApp.urls')),
