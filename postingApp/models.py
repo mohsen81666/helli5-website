@@ -74,6 +74,9 @@ class Event(models.Model):
     description = models.TextField(verbose_name='شرح', max_length=256, null=True, blank=True)
     link = models.CharField(verbose_name='لینک', max_length=128, null=True, blank=True)
 
+    def __str__(self):
+        return self.title
+
 
 # @receiver(post_save, sender=PostStuff)
 # def send_mail_to_subscribers(sender, instance, **kwargs):
