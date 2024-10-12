@@ -21,16 +21,17 @@ class PreRegisterationFrom(ModelForm):
 
 
 class SetOwnPasswordForm(forms.Form):
-    password1 = forms.CharField(label=_(u"رمز عبور جدید"),
+    password1 = forms.CharField(label=_(u"گذرواژه جدید"),
                                 widget=forms.PasswordInput)
-    password2 = forms.CharField(label=_(u"تایید رمز عبور"),
+    password2 = forms.CharField(label=_(u"تایید گذرواژه"),
                                 widget=forms.PasswordInput,
-                                help_text=_("رمز عبور را دوباره وارد کنید."))
+                                help_text=_("گذرواژه را دوباره وارد کنید."))
 
 
-class SetOneTimeEntryPassword(forms.Form):
+class SetUserPasswordForm(forms.Form):
     username = forms.CharField(label=_(u"نام کاربری"), required=True)
-    password = forms.CharField(label=_(u"گذرواژه یک بار مصرف"), required=True)
+    password = forms.CharField(label=_(u"گذرواژه جدید"), required=True)
+    force_to_change = forms.BooleanField(label=_(u"کاربر در اولین ورود گذرواژه را عوض کند"), required=False)
 
 
 class ContactForm(forms.Form):

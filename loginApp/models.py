@@ -78,12 +78,6 @@ class TeacherProfile(models.Model):
         return self.user.first_name + ' ' + self.user.last_name
 
 
-# Add a field to user to check if users changed their one time entry password
-class SetOwnPassword(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    is_set = models.BooleanField(default=False)
-
-
 class PreRegisteredStudent(models.Model):
 
     #     مشخصات دانش آموز

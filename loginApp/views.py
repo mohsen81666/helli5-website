@@ -70,17 +70,12 @@ def login(request):
             if login_form.is_valid():
                 # get authenticated user
                 user = login_form.login(request)
-
-                # Check if user changed his one time entry password and if not, redirect him to set password
-                try:
-                    set_own_password = SetOwnPassword.objects.get(user=user)
-                except SetOwnPassword.DoesNotExist:
-                    set_own_password = None
-                if not(set_own_password and set_own_password.is_set):
-                    request.session['username'] = user.username
-                    return redirect('set-own-password')
-
                 if user:
+                    # Check if user has to change his password, redirect him to set password
+                    profile = Profile.objects.get(user=user)
+                    if profile.force_to_change_password:
+                        request.session['username'] = user.username
+                        return redirect('set-own-password')
                     # login user and redirect to panel
                     auth_login(request, user)
                     return redirect('user-panel')
@@ -243,40 +238,41 @@ def set_own_password(request):
                 user = User.objects.get(username=username)
                 user.set_password(raw_password1)
                 user.save()
-                try:
-                    set_own_password = SetOwnPassword.objects.get(user=user)
-                except SetOwnPassword.DoesNotExist:
-                    set_own_password = SetOwnPassword(user=user, is_set=False)
-                set_own_password.is_set = True
-                set_own_password.save()
+                profile = Profile.objects.get(user=user)
+                profile.force_to_change_password = False
+                profile.save()
+            else:
+                return redirect('set-own-password')
+
+            # Redirect to login with new password
             return redirect('login')
 
     return render(request, 'set_own_password.html', context={'set_password': set_password_form})
 
 
 @csrf_protect
-def set_oneTimeEntry_password(request):
+def change_user_password(request):
     user = request.user
     if user.is_authenticated and user.username == 'admin':
-        set_password_form = SetOneTimeEntryPassword(request.POST or None)
+        set_password_form = SetUserPasswordForm(request.POST or None)
         if request.method == "POST":
             if set_password_form.is_valid():
                 username = set_password_form.cleaned_data.get('username')
                 raw_password = set_password_form.cleaned_data.get('password')
+                force_to_change = set_password_form.cleaned_data.get('force_to_change')
+                print(force_to_change)
                 try:
                     user = User.objects.get(username=username)
+                    user.set_password(raw_password)
+                    user.save()
+                    profile = Profile.objects.get(user=user)
+                    profile.force_to_change_password = force_to_change
+                    profile.save()
+                    return redirect('user-panel')
                 except User.DoesNotExist:
                     set_password_form.errors['error'] = 'کاربر یافت نشد.'
-                    return render(request, 'set_oneTimeEntry_password.html', context={'set_password_form': set_password_form})
-                user.set_password(raw_password)
-                user.save()
-                set_own_password = SetOwnPassword.objects.get(user=user)
-                set_own_password.is_set = False
-                set_own_password.save()
 
-                return redirect('user-panel')
-
-    return render(request, 'set_oneTimeEntry_password.html', context={'set_password_form': set_password_form})
+    return render(request, 'change_user_password.html', context={'set_password_form': set_password_form})
 
 
 def export_pre_registrations(request, year=None):
