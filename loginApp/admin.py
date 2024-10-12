@@ -5,8 +5,31 @@ from loginApp.models import *
 admin.site.register(Subscriber)
 
 
-# admin.site.register(Profile)
-# admin.site.register(Role)
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'phone', 'role', 'force_to_change_password',)
+    list_filter = ('role',)
+    list_editable = ('force_to_change_password',)
+
+
+@admin.register(StudentProfile)
+class StudentProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'grade', 'field', 'educational_problem', 'financial_problem',)
+    list_filter = ('grade', 'field')
+    list_editable = ('grade', 'field', 'educational_problem', 'financial_problem')
+
+
+@admin.register(TeacherProfile)
+class TeacherProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'title', 'department')
+    list_editable = ('department',)
+
+
+@admin.register(TeachingDepartment)
+class TeachingDepartmentAdmin(admin.ModelAdmin):
+    list_display = ('name', 'order')
+    list_editable = ('order',)
+
 
 @admin.register(PreRegisteredStudent)
 class PreRegistrationAdmin(admin.ModelAdmin):
@@ -15,17 +38,9 @@ class PreRegistrationAdmin(admin.ModelAdmin):
     search_fields = ('student_first_name', 'student_last_name', 'melli_code')
 
 
-@admin.register(Profile)
-class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'job_title', 'grade', 'group', 'financial_problem',)
-    list_filter = ('grade', 'group',)
-
-
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):
     ordering = ['seen']
     # list_display_links = ['plate']
     list_display = ('date', 'subject', 'name', 'email', 'seen')
     list_filter = ('seen', 'date')
-
-# admin.site.register(Contact, ContactAdmin)

@@ -1,18 +1,20 @@
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate
+from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth import login as auth_login
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.views.decorators.csrf import csrf_protect
+import os
+import xlrd
 import xlwt
 from helli5.decorators import unauth_user
-from .models import PreRegisteredStudent, SetOwnPassword
-from .forms import LoginForm, SignUpForm, SetOwnPasswordForm, SetOneTimeEntryPassword, PreRegisterationFrom
+from .models import *
+from .forms import *
 
 @login_required(login_url='login')
 def user_panel(request):
@@ -83,26 +85,149 @@ def login(request):
                     auth_login(request, user)
                     return redirect('user-panel')
 
-        elif request.POST.get('submit') == 'ثبت نام':
-            signup_form = SignUpForm(request.POST)
-            if signup_form.is_valid():
-                user = signup_form.save()
-                user.refresh_from_db()  # load the profile instance created by the signal
-                user.profile.birth_date = signup_form.cleaned_data.get('birth_date')
-                user.profile.phone = signup_form.cleaned_data.get('phone')
-                # user.profile.img = request.POST['img']
-                user.save()
-                raw_password = signup_form.cleaned_data.get('password1')
-                user = authenticate(username=user.username, password=raw_password)
-                print(user)
-                auth_login(request, user)
-                return redirect('index')
+        # elif request.POST.get('submit') == 'ثبت نام':
+        #     signup_form = SignUpForm(request.POST)
+        #     if signup_form.is_valid():
+        #         user = signup_form.save()
+        #         user.refresh_from_db()  # load the profile instance created by the signal(post_save in models)
+        #         user.profile.birth_date = signup_form.cleaned_data.get('birth_date')
+        #         user.profile.phone = signup_form.cleaned_data.get('phone')
+        #         # user.profile.img = request.POST['img']
+        #         user.save()
+        #         raw_password = signup_form.cleaned_data.get('password1')
+        #         user = authenticate(username=user.username, password=raw_password)
+        #         print(user)
+        #         auth_login(request, user)
+        #         return redirect('index')
 
     context = {
         'login_form': login_form,
         'signup_form': signup_form
     }
     return render(request, 'login.html', context)
+
+
+# Adding users by an excel file
+def bunch_add(request):
+    logged_in_user = request.user
+    if logged_in_user.is_authenticated and logged_in_user.is_superuser:
+        if request.method == "POST":
+            form = UserBunchAddForm(request.POST, request.FILES)
+            if form.is_valid():
+                file = request.FILES.getlist('file')[0]
+                user_role = form.cleaned_data['user_role']
+                path = settings.MEDIA_ROOT + '/excels/'
+                if not os.path.isdir(path):
+                    os.makedirs(path)
+                with open(path + '/' + file.name, 'wb+') as destination:
+                    for chunk in file.chunks():
+                        destination.write(chunk)
+                excel_file_path = path + file.name
+                wb = xlrd.open_workbook(excel_file_path)
+                sheet = wb.sheet_by_index(0)
+                rows = sheet.nrows
+                User = get_user_model()
+                users_add_count = 0
+                errors = []
+                for i in range(1, rows):
+                    user = User()
+                    username = sheet.cell_value(i, 0)
+                    # Integers may be stored as floats in Excel
+                    # This leads to having usernames with trailing zeros, like 40000000.0
+                    if isinstance(username, float) and username == int(username):
+                        username = int(username)
+                    user.username = username
+                    password = sheet.cell_value(i, 1)
+                    # same problem as above
+                    if isinstance(password, float) and password == int(password):
+                        password = int(password)
+                    user.set_password(str(password))
+                    user.first_name = sheet.cell_value(i, 2)
+                    user.last_name = sheet.cell_value(i, 3)
+                    user.email = sheet.cell_value(i, 4)
+                    try:
+                        user.save()
+                        users_add_count += 1
+                        # Create profile
+                        profile = Profile()
+                        profile.user = user
+                        profile.role = user_role
+                        profile.melli_code = sheet.cell_value(i, 5)
+                        profile.birth_date = sheet.cell_value(i, 6)
+                        profile.phone = sheet.cell_value(i, 7)
+                        if sheet.cell_value(i, 8):
+                            profile.force_to_change_password = sheet.cell_value(i, 8)
+                        try:
+                            profile.save()
+                            # Create role profile
+                            if user_role == 'student':
+                                # Create student profile
+                                st_profile = StudentProfile()
+                                st_profile.user = user
+                                st_profile.student_code = int(sheet.cell_value(i, 9))
+                                st_profile.grade = int(sheet.cell_value(i, 10))
+                                st_profile.field = sheet.cell_value(i, 11)
+                                st_profile.enroll_year = int(sheet.cell_value(i, 12))
+                                st_profile.dad_phone = sheet.cell_value(i, 13)
+                                st_profile.mom_phone = sheet.cell_value(i, 14)
+                                try:
+                                    st_profile.save()
+                                except Exception as e:
+                                    # reverse previous saves
+                                    user.delete()
+                                    profile.delete()
+                                    users_add_count -= 1
+                                    errors.append({
+                                        "username": username,
+                                        "message": str(e),
+                                    })
+                            elif user_role == 'teacher':
+                                # Create teacher profile
+                                t_profile = TeacherProfile()
+                                t_profile.user = user
+                                t_profile.title = sheet.cell_value(i, 9)
+                                t_profile.description = sheet.cell_value(i, 10)
+                                # Then you have to set teaching department in admin page
+                                try:
+                                    t_profile.save()
+                                except Exception as e:
+                                    # reverse previous saves
+                                    user.delete()
+                                    profile.delete()
+                                    users_add_count -= 1
+                                    errors.append({
+                                        "username": username,
+                                        "message": str(e),
+                                    })
+                        except Exception as e:
+                            # reverse previous save
+                            user.delete()
+                            users_add_count -= 1
+                            errors.append({
+                                "username": username,
+                                "message": str(e),
+                            })
+
+                    except Exception as e:
+                        errors.append({
+                            "username": username,
+                            "message": str(e),
+                        })
+            context = {
+                'users_add_role': user_role,
+                'users_add_count': users_add_count,
+                'errors': errors,
+                'bunch_add': UserBunchAddForm,
+            }
+
+            return render(request, 'user_bunch_add.html', context)
+
+        context = {
+            'bunch_add': UserBunchAddForm,
+        }
+        return render(request, 'user_bunch_add.html', context)
+
+    return HttpResponse(401)
 
 
 @csrf_protect
@@ -249,3 +374,35 @@ def export_pre_registrations(request, year=None):
 
     template = loader.get_template('401.html')
     return HttpResponse(template.render({}, request))
+
+
+# # Export user profiles
+# def export(request):
+#     response = HttpResponse(content_type='application/ms-excel')
+#     response['Content-Disposition'] = 'attachment; filename="Profile.xls"'
+#
+#     wb = xlwt.Workbook(encoding='utf-8')
+#     ws = wb.add_sheet('Profile')
+#
+#     # Sheet header, first row
+#     row_num = 0
+#
+#     font_style = xlwt.XFStyle()
+#     font_style.font.bold = True
+#
+#     columns = ['user', 'phone', 'grade', 'job_title', 'mom_number', 'dad_number']
+#
+#     for col_num in range(len(columns)):
+#         ws.write(row_num, col_num, columns[col_num], font_style)
+#
+#     # Sheet body, remaining rows
+#     font_style = xlwt.XFStyle()
+#
+#     rows = Profile.objects.all().values_list('user', 'phone', 'grade', 'job_title', 'mom_number', 'dad_number')
+#     for row in rows:
+#         row_num += 1
+#         for col_num in range(len(row)):
+#             ws.write(row_num, col_num, row[col_num], font_style)
+#
+#     wb.save(response)
+#     return response

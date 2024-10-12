@@ -38,7 +38,6 @@ urlpatterns = [
 
     path('export-pres/', export_pre_registrations, name='export-pres'),
     path('export-pres/<year>', export_pre_registrations, name='export-pres-current'),
-    path('bunch-add', views.bunch_add_model, name='bunch-add'),
 
     path('admin/', admin.site.urls),
     path('feed/rss', LatestPostsFeed(), name='posts_feed'),
@@ -46,7 +45,6 @@ urlpatterns = [
     path('درباره-ما/', views.about, name='about'),
     path('کنکور/', views.konkour, name='konkour'),
     path('teachers/', views.teachers, name='teachers'),
-    # path('export', views.export, name='export'),
 
     path('pre-registeration/', pre_registeration, name='pre_registeration'),
     path('pre-registeration/<melli>/<ssid>', pre_registeration, name='compelete_pre_registeration'),

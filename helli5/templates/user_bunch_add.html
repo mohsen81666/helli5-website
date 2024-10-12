@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<header class="hero">
+    <div class="hero-image" style="background-image: url({% static '/images/کتابخانه-دبیرستان-علامه-حلی۵.jpg' %})"></div>
+    <h1 class="display-3">
+        پنل کاربری
+        ({{ user.first_name }} {{ user.last_name }})
+    </h1>
+</header>
+
+<section>
+    <div class="container py-5">
+        <div class="row d-flex align-items-stretch no-gutters order-md-last">
+            {% include 'user_sidebar.html' %}
+            <div class="col-md-9 p-4 bg-light" style="border-radius: 20px">
+                {% if users_add_role %}
+                <div class="card mb-3" dir="ltr">
+                    <div class="card-body">
+                        <h5 class="pb-2">{{ users_add_count }} {{ users_add_role }}s added.</h5>
+                        {% if errors|length > 0 %}
+                        <h5>Errors:</h5>
+                        <ul>
+                            {% for e in errors %}
+                            <li>{{ e.username }}: {{ e.message }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+                <form method="post" enctype="multipart/form-data" action="{% url 'user-bunch-add' %}">
+                    {% csrf_token %}
+                    <div>
+                        {{ bunch_add.user_role|as_crispy_field }}
+                    </div>
+                    <div class="pt-3">
+                        {{ bunch_add.file|as_crispy_field }}
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#helpModal">
+                            راهنمای ستونها
+                        </button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="helpModal" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="modal-title fs-5" id="exampleModalLabel">راهنمای ستونهای فایل اکسل</h2>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="fw-bold">ستونها باید به ترتیب زیر باشد:</div>
+                                    <div>
+                                        توجه:
+                                        <ol>
+                                            <li>سطر اول فایل عناوین هستند و خوانده نمی شود.</li>
+                                            <li>موارد ستاره دار * اجباری هستند.</li>
+                                        </ol>
+                                    </div>
+                                    <ol type="A">
+                                        <li>نام کاربری* (Unique)</li>
+                                        <li>کلمه عبور*</li>
+                                        <li>نام*</li>
+                                        <li>نام خانوادگی*</li>
+                                        <li>ایمیل</li>
+                                        <li>شماره ملی(Text - شامل صفرهای اول)</li>
+                                        <li>تاریخ تولد (مثال: 28-05-1388)</li>
+                                        <li>تلفن (Text - شامل صفر)</li>
+                                        <li>آیا کاربر باید در اولین ورود، کلمه عبور خود را عوض کند؟ (True/False)</li>
+                                    </ol>
+                                    <div class="fw-bolder pb-2">نقش کاربری: دانش آموز</diV>
+                                    <ol type="A" start="10">
+                                        <li>شماره دانش آموزی* (Unique)</li>
+                                        <li>پایه* (10/11/12)</li>
+                                        <li>رشته* (R/T/E)</li>
+                                        <li>سال ورود* (چهار رقمی)</li>
+                                        <li>تلفن پدر (Text - شامل صفر)</li>
+                                        <li>تلفن مادر (Text - شامل صفر)</li>
+                                    </ol>
+                                    <div class="fw-bolder pb-2">نقش کاربری: دبیر</diV>
+                                    <ol type="A" start="10">
+                                        <li>عنوان*</li>
+                                        <li>توضیحات*</li>
+                                    </ol>
+                                    <div class="px-3">توجه: بعد از ثبت دبیران باید دپارتمان آموزشی آنها در بخش ادمین مشخص شود.</div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary mt-3">ارسال</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,5 +1,3 @@
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from helli5 import settings
@@ -9,10 +7,8 @@ from postingApp.models import PostStuff, Event
 from loginApp.models import Profile, Contact
 from django.db.models import Q
 from dynamicApp.models import SliderContent
-from loginApp.models import Profile
 from loginApp.forms import ContactForm
 import os
-import xlrd
 import xlwt
 import jdatetime
 
@@ -115,97 +111,6 @@ def custom_404(request, exception):
 def custom_500(request):
     return render(request, '500.html', status=500)
 
-
-def bunch_add_model(request):
-    user = request.user
-    if user.is_authenticated and user.username == 'admin':
-        if request.method == "POST":
-            form = BunchAddForm(request.POST, request.FILES)
-            if form.is_valid():
-                file = request.FILES.getlist('file')[0]
-                model_type = form.cleaned_data['model_type']
-                path = settings.MEDIA_ROOT + '/excels/'
-                if not os.path.isdir(path):
-                    os.makedirs(path)
-                with open(path + '/' + file.name, 'wb+') as destination:
-                    for chunk in file.chunks():
-                        destination.write(chunk)
-                excel_folders = path
-                excel_file_path = excel_folders + file.name
-                loc = (excel_file_path)
-                wb = xlrd.open_workbook(loc)
-                sheet = wb.sheet_by_index(0)
-                rows = sheet.nrows
-                if model_type == 'user':
-                    User = get_user_model()
-                    for i in range(1, rows):
-                        user = User()
-                        username = sheet.cell_value(i, 0)
-                        # Integers may be stored as floats in Excel
-                        # This leads to having usernames with trailing zeros, like 40000000.0
-                        if isinstance(username, float) and username == int(username):
-                            username = int(username)
-                        user.username = username
-                        password = sheet.cell_value(i, 1)
-                        # same problem as above
-                        if isinstance(password, float) and password == int(password):
-                            password = int(password)
-                        user.set_password(str(password))
-                        user.first_name = sheet.cell_value(i, 2)
-                        user.last_name = sheet.cell_value(i, 3)
-                        user.email = sheet.cell_value(i, 4)
-                        group = Group.objects.get(name=sheet.cell_value(i, 5))
-                        user.save()
-                        user.groups.add(group)
-                        user.save()
-                        profile = user.profile
-                        profile.user = user
-                        profile.job_title = sheet.cell_value(i, 6)
-                        profile.mom_number = int(sheet.cell_value(i, 7))
-                        profile.dad_number = int(sheet.cell_value(i, 8))
-                        profile.phone = int(sheet.cell_value(i, 9))
-                        profile.save()
-            context = {
-                'bunch_add': BunchAddForm,
-            }
-
-            return render(request, 'bunch_add.html', context)
-        context = {
-            'bunch_add': BunchAddForm,
-        }
-        return render(request, 'bunch_add.html', context)
-    return HttpResponse(401)
-
-
-def export(request):
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="Profile.xls"'
-
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('Profile')
-
-    # Sheet header, first row
-    row_num = 0
-
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-
-    columns = ['user', 'phone', 'grade', 'job_title', 'mom_number', 'dad_number']
-
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-
-    # Sheet body, remaining rows
-    font_style = xlwt.XFStyle()
-
-    rows = Profile.objects.all().values_list('user', 'phone', 'grade', 'job_title', 'mom_number', 'dad_number')
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws.write(row_num, col_num, row[col_num], font_style)
-
-    wb.save(response)
-    return response
 
 def konkour(request):
     return render(request, 'konkour.html')

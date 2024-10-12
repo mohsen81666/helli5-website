@@ -82,3 +82,14 @@ class LoginForm(forms.Form):
         password = self.cleaned_data.get('password')
         user = authenticate(username=username, password=password)
         return user
+
+
+class UserBunchAddForm(forms.Form):
+    user_role = forms.ChoiceField(required=True, label="نقش کاربران",
+                                  choices=[('student', 'دانش آموز'),
+                                            ('teacher', 'دبیر'),
+                                            ('no-profile', 'کاربر بدون نقش')])
+    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}),
+                           label="فایل اکسل",
+                           help_text="<br>فایل اکسل با فرمت xls")
+

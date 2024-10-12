@@ -5,6 +5,79 @@ from django.dispatch import receiver
 
 User = get_user_model()
 
+
+# General profile for all users
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    img = models.ImageField(upload_to='profilePic', default="/profilePic/default.png")
+    melli_code = models.CharField(max_length=10, null=True,blank=True)
+    birth_date = models.DateField(null=True, blank=True)
+    phone = models.CharField(max_length=11, null=True, blank=True)
+    role = models.CharField(choices=[('admin', 'مدیریت'),
+                                     ('teacher', 'دبیر'),
+                                     ('student', 'دانش آموز'),
+                                     ('parent', 'والدین'),
+                                     ('other', 'سایر')],
+                max_length=7, default="student")
+    force_to_change_password = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.user.username} ({self.role})'
+
+
+# Specific profile for students
+class StudentProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    student_code = models.IntegerField(null=False, blank=False)
+    grade = models.CharField(choices=[('10', 'پایه ی دهم'),
+                                      ('11', 'پایه ی یازدهم'),
+                                      ('12', 'پایه ی دوازدهم')],
+                max_length=2, null=False, blank=False)
+    field = models.CharField(choices=[('R', 'رشته ریاضی'),
+                                      ('T', 'رشته تجربی'),
+                                      ('E', 'رشته انسانی')],
+                max_length=1, null=False, blank=False)
+    enroll_year = models.IntegerField(null=False, blank=False, default=1400)
+    dad_phone = models.CharField(max_length=11, null=True, blank=True)
+    mom_phone = models.CharField(max_length=11, null=True, blank=True)
+    educational_problem = models.BooleanField(default=False)
+    financial_problem = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f'{self.user.username} ({self.grade}{self.field})'
+
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         Profile.objects.create(user=instance)
+
+# @receiver(post_save, sender=User)
+# def save_user_profile(sender, instance, **kwargs):
+#     instance.profile.save()
+
+
+class TeachingDepartment(models.Model):
+    name = models.CharField(verbose_name='نام دپارتمان', max_length=50, blank=False)
+    order =models.IntegerField(verbose_name='ترتیب', default=0, blank=False)
+
+    def __str__(self):
+        return self.name
+
+
+# Specific profile for teachers
+class TeacherProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    title = models.CharField(verbose_name='عنوان', max_length=50)
+    description = models.CharField(verbose_name='توضیحات', max_length=200)
+    department = models.ForeignKey(TeachingDepartment, null=True, blank=True, on_delete=models.DO_NOTHING)
+    active = models.BooleanField(default=True)
+    promote = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.user.first_name + ' ' + self.user.last_name
+
+
 # Add a field to user to check if users changed their one time entry password
 class SetOwnPassword(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -200,52 +273,6 @@ class PreRegisteredStudent(models.Model):
 
     date_added = models.DateTimeField(auto_now_add=True)
     is_valid = models.BooleanField(default=False)
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    img = models.ImageField(upload_to='profilePic', default="/profilePic/default.png")
-    phone = models.CharField(max_length=30, blank=True, null=True)
-    grade = models.CharField(choices=[('10', 'پایه ی دهم'),
-                                      ('11', 'پایه ی یازدهم'),
-                                      ('12', 'پایه ی دوازدهم')], max_length=2, blank=True, null=True)
-    birth_date = models.DateField(null=True, blank=True)
-    job_title = models.CharField(max_length=50, default='دانش آموز')
-    description = models.CharField(max_length=150, blank=True)
-    financial_problem = models.BooleanField(default=False)
-
-    CHOICE = [
-        ('math', 'ریاضی'),
-        ('phys', 'فیزیک'),
-        ('chem', 'شیمی'),
-        ('bio', 'زیست'),
-        ('comp', 'کامپیوتر'),
-        ('eng', 'زبان'),
-        ('far', 'فارسی'),
-        ('other', 'سایر'),
-    ]
-    group = models.CharField(max_length=8, choices=CHOICE, blank=True, null=True)
-    mom_number = models.CharField(max_length=30, blank=True, null=True)
-    dad_number = models.CharField(max_length=30, blank=True, null=True)
-
-    def __str__(self):
-        return self.user.username
-
-    class Meta:
-        permissions = (
-            ("send_sms", "send_sms"),
-        )
-
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
 
 
 class Subscriber(models.Model):
