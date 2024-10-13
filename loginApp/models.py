@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django_jalali.db import models as jmodels
 
 User = get_user_model()
 
@@ -11,7 +12,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     img = models.ImageField(upload_to='profilePic', default="/profilePic/default.png")
     melli_code = models.CharField(max_length=10, null=True,blank=True)
-    birth_date = models.DateField(null=True, blank=True)
+    birth_date = jmodels.jDateField(null=True, blank=True)
     phone = models.CharField(max_length=11, null=True, blank=True)
     role = models.CharField(choices=[('admin', 'مدیریت'),
                                      ('teacher', 'دبیر'),
