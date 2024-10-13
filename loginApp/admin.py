@@ -21,8 +21,8 @@ class StudentProfileAdmin(admin.ModelAdmin):
 
 @admin.register(TeacherProfile)
 class TeacherProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'title', 'department')
-    list_editable = ('department',)
+    list_display = ('user', 'title', 'department', 'active', 'promote')
+    list_editable = ('department', 'active', 'promote')
 
 
 @admin.register(TeachingDepartment)

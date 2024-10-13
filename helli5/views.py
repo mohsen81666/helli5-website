@@ -4,7 +4,7 @@ from helli5 import settings
 from .models import *
 from .forms import *
 from postingApp.models import PostStuff, Event
-from loginApp.models import Profile, Contact
+from loginApp.models import Contact, TeacherProfile, TeachingDepartment
 from django.db.models import Q
 from dynamicApp.models import SliderContent
 from loginApp.forms import ContactForm
@@ -83,12 +83,12 @@ def about(request):
 
 
 def teachers(request):
-    departments = Department.objects.all().order_by('order')
+    departments = TeachingDepartment.objects.all().order_by('order')
     profiles = TeacherProfile.objects.filter(active=True)
 
     groups = {}
     for department in departments:
-        groups[department.name] = [p for p in profiles if p.department == department]
+        groups[department.name] = [p for p in profiles if p.department == department and p.active and p.promote]
 
     context = {
         'groups': groups,
