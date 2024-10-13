@@ -159,7 +159,7 @@ def bunch_add(request):
                                 # Create student profile
                                 st_profile = StudentProfile()
                                 st_profile.user = user
-                                st_profile.student_code = int(sheet.cell_value(i, 9))
+                                st_profile.student_id = int(sheet.cell_value(i, 9))
                                 st_profile.grade = int(sheet.cell_value(i, 10))
                                 st_profile.field = sheet.cell_value(i, 11)
                                 st_profile.enroll_year = int(sheet.cell_value(i, 12))
