@@ -148,7 +148,7 @@ def bunch_add(request):
                         profile.user = user
                         profile.role = user_role
                         profile.melli_code = sheet.cell_value(i, 5)
-                        profile.birth_date = sheet.cell_value(i, 6)
+                        profile.birth_date = sheet.cell_value(i, 6) if sheet.cell_value(i, 6) else None
                         profile.phone = sheet.cell_value(i, 7)
                         if sheet.cell_value(i, 8):
                             profile.force_to_change_password = sheet.cell_value(i, 8)
@@ -180,8 +180,11 @@ def bunch_add(request):
                                 # Create teacher profile
                                 t_profile = TeacherProfile()
                                 t_profile.user = user
-                                t_profile.title = sheet.cell_value(i, 9)
-                                t_profile.description = sheet.cell_value(i, 10)
+                                t_profile.teacher_id = sheet.cell_value(i, 9)
+                                t_profile.title = sheet.cell_value(i, 10)
+                                t_profile.description = sheet.cell_value(i, 11)
+                                t_profile.academic_degree = sheet.cell_value(i, 12)
+                                t_profile.academic_field = sheet.cell_value(i, 13)
                                 # Then you have to set teaching department in admin page
                                 try:
                                     t_profile.save()

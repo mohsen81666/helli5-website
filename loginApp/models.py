@@ -69,11 +69,14 @@ class TeachingDepartment(models.Model):
 # Specific profile for teachers
 class TeacherProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    teacher_id = models.IntegerField(null=True, blank=True)
     title = models.CharField(verbose_name='عنوان', max_length=50)
     description = models.CharField(verbose_name='توضیحات', max_length=200)
+    academic_degree = models.CharField(verbose_name='مدرک تحصیلی', max_length=30, null=True, blank=True)
+    academic_field = models.CharField(verbose_name='رشته تحصیلی', max_length=40, null=True, blank=True)
     department = models.ForeignKey(TeachingDepartment, null=True, blank=True, on_delete=models.DO_NOTHING)
     active = models.BooleanField(default=True)
-    promote = models.BooleanField(default=False)
+    promote = models.BooleanField(default=False)  # Promote to the teachers page
 
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name

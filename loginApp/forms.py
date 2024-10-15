@@ -92,5 +92,6 @@ class UserBunchAddForm(forms.Form):
                                             ('no-profile', 'کاربر بدون نقش')])
     file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}),
                            label="فایل اکسل",
-                           help_text="<br>فایل اکسل با فرمت xls")
+                           help_text="<br>فایل اکسل با فرمت xls" +
+                                    "<br>اگر تعداد موارد زیاد است بهتر است به چند بخش تقسیم شوند تا امکان رخداد خطا کمتر شود. (مثلاً دانش اموزان، کلاس به کلاس اضافه شوند.)")
 
