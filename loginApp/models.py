@@ -29,7 +29,7 @@ class Profile(models.Model):
 # Specific profile for students
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    student_id = models.IntegerField(null=False, blank=False)
+    student_id = models.IntegerField(unique=True, null=False, blank=False)
     grade = models.CharField(choices=[('10', 'پایه ی دهم'),
                                       ('11', 'پایه ی یازدهم'),
                                       ('12', 'پایه ی دوازدهم')],
