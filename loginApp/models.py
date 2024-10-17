@@ -19,7 +19,7 @@ class Profile(models.Model):
                                      ('student', 'دانش آموز'),
                                      ('parent', 'والدین'),
                                      ('other', 'سایر')],
-                max_length=7, default="student")
+                max_length=7, default="other")
     force_to_change_password = models.BooleanField(default=False)
 
     def __str__(self):

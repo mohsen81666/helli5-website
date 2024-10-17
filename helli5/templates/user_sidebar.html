@@ -4,46 +4,37 @@
         <h5 class="card-title text-center">{{ user.first_name }} {{ user.last_name }}</h5>
         <p class="card-text text-center">({{ user.username }})</p>
     </div>
-    <ul class="list-group list-group-flush text-center">
-        <li class="list-group-item">
-            {% if user.profile.grade == '10' %}
-                پایه دهم
-            {% elif user.profile.grade == '11' %}
-                پایه یازدهم
-            {% elif user.profile.grade == '12' %}
-                پایه دوازدهم
-            {% elif user.is_superuser %}
-                کاربر ویژه
-            {% else %}
-                کاربر
-            {% endif %}
-        </li>
-        <li class="list-group-item">{{ user.profile.phone }}</li>
-    </ul>
+    <hr>
     <div class="card-body text-right" dir="rtl">
         <ul>
-        {% if perms.courseApp.see_reports %}
+            {% if user.profile.role == 'student' %}
             <li>
-                <a href="{% url 'studentReports' %}" class="card-link">کارنامه ها</a>
+                <a href="{% url 'student-reports' %}" class="card-link">کارنامه ها</a>
             </li>
-        {% endif %}
-        {% if user.is_superuser %}
+            {% endif %}
+            {% if perms.courseApp.add_report %}
             <li class="card-link">
-                <a href="{% url 'report' %}">بارگذاری کارنامه‌ها</a>
+                <a href="{% url 'add-reports' %}">بارگذاری کارنامه‌ها</a>
             </li>
+            {% endif %}
+            {% if perms.loginApp.add_profile %}
             <li class="card-link">
                 <a href="{% url 'user-bunch-add' %}">اضافه کردن گروهی کاربرها</a>
             </li>
+            {% endif %}
+            {% if perms.auth.change_user %}
             <li class="card-link">
                 <a href="{% url 'change-user-password' %}">تغییر گذرواژه کاربر</a>
             </li>
+            {% endif %}
+            {% if perms.loginApp.view_preregisteredstudent %}
             <li class="card-link">
                 <a href="{% url 'export-pres' %}">خروجی پیش ثبت نامی ها - کل</a>
             </li>
             <li class="card-link">
                 <a href="{% url 'export-pres-current' '2024' %}">خروجی پیش ثبت نامی ها - سال جاری</a>
             </li>
-        {% endif %}
+            {% endif %}
             <li>
                 <a href="{% url 'logout' %}" class="card-link">خروج</a>
             </li>
