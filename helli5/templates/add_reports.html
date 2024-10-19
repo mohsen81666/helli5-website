@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
 
 
 {% block content %}
@@ -16,16 +16,16 @@
     <div class="container py-5">
         <div class="row d-flex align-items-stretch no-gutters order-md-last">
             {% include 'user_sidebar.html' %}
-            <div class="col-md-9 text-center p-4 p-md-5 bg-light" style="border-radius: 20px">
-                <form method="post" enctype="multipart/form-data" action="{% url 'report' %}">
+            <div class="col-md-9 p-4 p-md-5 bg-light" style="border-radius: 20px">
+                <form method="post" enctype="multipart/form-data" action="{% url 'add-reports' %}">
                     {% csrf_token %}
-                    <div class="row">
-                        <div class="col-6">
-                            {{ report.report_title }}
-                        </div>
+                    <div class="">
+                        {{ student_report_form.report_title|as_crispy_field }}
                     </div>
-                    {{ report.files }}
-                    <button type="submit">ارسال</button>
+                    <div class="py-4">
+                        {{ student_report_form.files|as_crispy_field }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">ارسال</button>
                 </form>
             </div>
         </div>

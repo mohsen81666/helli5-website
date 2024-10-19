@@ -3,8 +3,8 @@ from django.contrib.auth import get_user_model
 from django.utils.text import slugify
 from django.urls import reverse
 from .utils import create_zip
-
-# from honorsApp.models import period_choices
+from loginApp.models import StudentProfile
+from django_jalali.db import models as jmodels
 
 User = get_user_model()
 
@@ -86,20 +86,20 @@ class Question(models.Model):
         return self.title
 
 
-class Reports(models.Model):
-    title = models.CharField(max_length=30, blank=False)
+class Report(models.Model):
+    title = models.CharField(max_length=64, null=False, blank=False)
+    date = jmodels.jDateField(null=False, blank=False)
 
     def __str__(self):
         return self.title
 
 
-class StudentReports(models.Model):
-    student = models.CharField(max_length=8, blank=False)
+class StudentReport(models.Model):
+    report = models.ForeignKey(Report, on_delete=models.CASCADE)
+    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE)
     report_url = models.CharField(max_length=128, blank=False)
-    report = models.ForeignKey(Reports, on_delete=models.CASCADE)
+    show_to_student = models.BooleanField(default=True)
 
-    class Meta:
-        permissions = (
-            ("add_reports", "can add reports"),
-            ("see_reports", "see_reports")
-        )
+    def __str__(self):
+        return self.report.title + ' - ' + str(self.student.student_id)
+

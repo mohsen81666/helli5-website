@@ -1,17 +1,14 @@
-import os
-from helli5 import settings
 from django.shortcuts import render, get_object_or_404, redirect, reverse
-from .models import *
-from .forms import reportForm
-import hashlib
-import csv
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.db.models import Q
+from helli5 import settings
 from helli5.decorators import has_perm
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
+from .models import *
+from .forms import *
+from loginApp.models import StudentProfile
+import os
+import csv
 
 
 
@@ -66,57 +63,76 @@ def homework(request, course_id, assignment_id):
 
 
 @has_perm('courseApp.add_report')
-def upload_report(request):
+def add_reports(request):
     if request.method == "POST":
-        form = reportForm(request.POST, request.FILES)
+        form = StudentReportForm(request.POST, request.FILES)
         if form.is_valid():
+            report_title = form.cleaned_data['report_title']
+            report = Report.objects.get(title=report_title)
             files = request.FILES.getlist('files')
-            directory = form.cleaned_data['report_title']
 
-            report = Reports.objects.filter(title=directory)
-            report = report.first()
+            folder = 'reports/' + str(report.id)
+            folder_addr = settings.MEDIA_ROOT + '/' + folder
+            if not os.path.isdir(folder_addr):
+                os.makedirs(folder_addr)
+
             for file in files:
                 student_id = file.name.split('.')[0]
-                hashname = hashlib.md5(student_id.encode('utf-8')).hexdigest() + '.' + file.name.split('.')[1]
-                student_report = StudentReports()
-                student_report.report = report
-                student_report.student = student_id
-                student_report.report_url = '//' + settings.SITE_URL + settings.MEDIA_URL + 'reports/' + str(
-                    report.id) + '/' + hashname
-                student_report.save()
-                path = settings.MEDIA_ROOT + '/reports/' + str(report.id)
-                if not os.path.isdir(path):
-                    os.makedirs(path)
-                with open(path + '/' + hashname, 'wb+') as destination:
-                    for chunk in file.chunks():
-                        destination.write(chunk)
-            return redirect(upload_report)
-        return HttpResponse(503)
+                student_profile = StudentProfile.objects.get(student_id=student_id)
+                if student_profile:
+                    # Check if report already exists
+                    exist_report = StudentReport.objects.filter(Q(report=report) & Q(student=student_profile))
+                    if not exist_report.first():
+                        # Create new report
+                        student_report = StudentReport()
+                        student_report.report = report
+                        student_report.student = student_profile
+                        student_report.report_url = settings.MEDIA_URL + folder + '/' + file.name
+                        student_report.save()
+                    # Save the file
+                    with open(folder_addr + '/' + file.name, 'wb+') as destination:
+                        for chunk in file.chunks():
+                            destination.write(chunk)
+
+            return redirect(add_reports)
+
+        return HttpResponse(form.errors.items())
+
     context = {
-        'report': reportForm,
+        'student_report_form': StudentReportForm,
     }
-    return render(request, 'report.html', context)
+    return render(request, 'add_reports.html', context)
 
 
-@has_perm('courseApp.see_reports')
 def student_reports(request):
     user = request.user
+    student_profile = StudentProfile.objects.get(user=user)
+    student_reports = StudentReport.objects.filter(student=student_profile).all().order_by('-report__date')
 
-    report_students = StudentReports.objects.filter(student=user.username).all()
-    reports = []
-    for report_student in report_students:
-        report = {
-            "name": report_student.report.title,
-            "link": report_student.report_url
+    if student_profile.financial_problem or student_profile.educational_problem:
+        context = {
+            "error_message": 'برای دریافت کارنامه به مدرسه مراجعه کنید.',
         }
-        reports.append(report)
-    if user.profile.financial_problem:
-        report = {
-            "name": 'برای دریافت کارنامه به مدرسه مراجعه کنید.',
-            "link": '#'
+
+    else:
+        reports = []
+        for s_report in student_reports:
+            report = {
+                "id": s_report.id,
+                "name": s_report.report.title,
+            }
+            reports.append(report)
+
+        context = {
+            'reports': reports,
         }
-        reports = [report]
-    context = {
-        'reports': reports,
+    return render(request, 'student_reports.html', context)
+
+
+def report_page(request, report_id):
+    student = StudentProfile.objects.filter(user=request.user).first()  # Get student for security purposes
+    student_report = get_object_or_404(StudentReport, Q(student=student) & Q(id=report_id))
+    context ={
+        'student_report': student_report,
     }
-    return render(request, 'reports_page.html', context)
+    return render(request, 'report_page.html', context)

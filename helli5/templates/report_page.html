@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<header class="hero">
+    <div class="hero-image" style="background-image: url({% static '/images/کارنامه.jpg' %});"></div>
+    <h1 class="display-3">کارنامه‌ ها</h1>
+</header>
+
+<section>
+    <div class="container py-5">
+        <div class="row d-flex align-items-stretch no-gutters order-md-last">
+            {% include 'user_sidebar.html' %}
+            <div class="col-md-9 text-center p-4 p-md-5 bg-light" style="border-radius: 20px">
+                <div class="d-flex justify-content-between">
+                    <div></div>
+                    <h3>{{ student_report.report.title }}</h3>
+                    <h5>
+                        <a href={% url 'student-reports' %}>
+                            بازگشت <i class="fa fa-arrow-left"></i>
+                        </a>
+                    </h5>
+                </div>
+                {% if student_report.show_to_student %}
+                    <iframe src={{ student_report.report_url }} width="800" height="600">
+                {% else %}
+                    <h5 class="py-4">شما امکان مشاهده این کارنامه را ندارید. برای دریافت کارنامه به مدرسه مراجعه کنید.</h5>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

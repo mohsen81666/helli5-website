@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<header class="hero">
+    <div class="hero-image" style="background-image: url({% static '/images/کارنامه.jpg' %});"></div>
+    <h1 class="display-3">کارنامه‌ها</h1>
+</header>
+
+<section>
+    <div class="container py-5">
+        <div class="row d-flex align-items-stretch no-gutters order-md-last">
+            {% include 'user_sidebar.html' %}
+            <div class="col-md-9 text-center p-4 p-md-5 bg-light" style="border-radius: 20px">
+                <h3>کارنامه های شما</h3>
+                {% if error_message %}
+                    <h5 class="py-4">{{ error_message }}</h5>
+                {% else %}
+                    <div class="list-group">
+                        {% for report in reports %}
+                            <a href={% url 'report-page' report.id %}  class="list-group-item">
+                                {{ report.name|linebreaksbr }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
