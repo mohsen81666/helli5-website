@@ -84,11 +84,11 @@ def about(request):
 
 def teachers(request):
     departments = TeachingDepartment.objects.all().order_by('order')
-    profiles = TeacherProfile.objects.filter(active=True)
+    profiles = TeacherProfile.objects.filter(Q(active=True) & Q(promote=True))
 
     groups = {}
     for department in departments:
-        groups[department.name] = [p for p in profiles if p.department == department and p.active and p.promote]
+        groups[department.name] = [p for p in profiles if p.department == department]
 
     context = {
         'groups': groups,

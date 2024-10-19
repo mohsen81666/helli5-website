@@ -9,7 +9,7 @@ User = get_user_model()
 
 # General profile for all users
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
     img = models.ImageField(upload_to='profilePic', default="/profilePic/default.png")
     melli_code = models.CharField(max_length=10, null=True,blank=True)
     birth_date = jmodels.jDateField(null=True, blank=True)
