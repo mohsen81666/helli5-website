@@ -1,4 +1,7 @@
 from django.contrib import admin
+from helli5 import settings
+import os
+import shutil
 
 from .models import *
 
@@ -6,6 +9,17 @@ from .models import *
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'date')
+
+    def delete_model(self, request, obj):
+        report_id = obj.id
+        obj.delete()
+        reports_folder = settings.MEDIA_ROOT + '/reports/' + str(report_id)
+        if os.path.isdir(reports_folder):
+            shutil.rmtree(reports_folder, ignore_errors=False)
+
+    def delete_queryset(self, request, queryset):
+        for obj in queryset:
+             self.delete_model(request, obj)
 
 
 @admin.register(StudentReport)

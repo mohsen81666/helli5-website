@@ -1,0 +1,9 @@
+{% extends "admin/delete_confirmation.html" %}
+
+{% block content %}
+    {{ block.super }}
+
+    <h2 style="padding-bottom: 1rem; color: red;">
+        با حذف این کارنامه، علامه بر همه اشیای مرتبط با آن، فایل کارنامه ها نیز از سرور حذف خواهند شد.
+    </h2>
+{% endblock %}
