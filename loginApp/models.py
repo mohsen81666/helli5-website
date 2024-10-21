@@ -25,6 +25,9 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user.username} ({self.role})'
 
+    class Meta:
+        User._meta.get_field('email')._unique = False
+
 
 # Specific profile for students
 class StudentProfile(models.Model):
