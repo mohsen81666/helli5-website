@@ -27,6 +27,8 @@ DEBUG = True
 ALLOWED_HOSTS = ['www.allamehelli5edu.ir', 'allamehelli5edu.ir', '37.152.189.163']
 # ALLOWED_HOSTS = ['127.0.0.1']
 
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
 # Application definition
 
 INSTALLED_APPS = [
