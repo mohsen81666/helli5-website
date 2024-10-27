@@ -26,7 +26,7 @@ class StudentReportForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        report_titles = [(s.title, s.title) for s in Report.objects.all()]
+        report_titles = [(s.title, s.title + '(' + s.grade + '/' + s.field + ')') for s in Report.objects.all()]
         self.fields['report_title'] = forms.ChoiceField(required=True, label='عنوان کارنامه',
                                                         choices=report_titles,
                                                         help_text="برای اضافه کردن عنوان جدید به بخش ادمین مراجعه کنید.")
