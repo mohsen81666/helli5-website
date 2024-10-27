@@ -8,7 +8,7 @@ from .models import *
 
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'date')
+    list_display = ('id', 'title', 'grade', 'field', 'date')
 
     def delete_model(self, request, obj):
         report_id = obj.id

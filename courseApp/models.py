@@ -88,6 +88,14 @@ class Question(models.Model):
 
 class Report(models.Model):
     title = models.CharField(max_length=64, null=False, blank=False)
+    grade = models.CharField(choices=[('10', 'پایه ی دهم'),
+                                      ('11', 'پایه ی یازدهم'),
+                                      ('12', 'پایه ی دوازدهم')],
+                max_length=2, null=False, blank=False)
+    field = models.CharField(choices=[('R', 'رشته ریاضی'),
+                                      ('T', 'رشته تجربی'),
+                                      ('E', 'رشته انسانی')],
+                max_length=1, null=False, blank=False)
     date = jmodels.jDateField(null=False, blank=False)
 
     def __str__(self):
