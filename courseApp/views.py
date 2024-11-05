@@ -104,6 +104,7 @@ def add_reports(request):
                     })
 
             context = {
+                'report': report,
                 'files_count': len(files),
                 'reports_add_count': reports_add_count,
                 'reports_update_count': len(files) - reports_add_count - len(errors),
