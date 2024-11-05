@@ -76,10 +76,12 @@ def add_reports(request):
             if not os.path.isdir(folder_addr):
                 os.makedirs(folder_addr)
 
+            reports_add_count = 0
+            errors = []
             for file in files:
                 student_id = file.name.split('.')[0]
-                student_profile = StudentProfile.objects.get(student_id=student_id)
-                if student_profile:
+                try:
+                    student_profile = StudentProfile.objects.get(student_id=student_id)
                     # Check if report already exists
                     exist_report = StudentReport.objects.filter(Q(report=report) & Q(student=student_profile))
                     if not exist_report.first():
@@ -89,12 +91,26 @@ def add_reports(request):
                         student_report.student = student_profile
                         student_report.report_url = settings.MEDIA_URL + folder + '/' + file.name
                         student_report.save()
+                        reports_add_count += 1
                     # Save the file
                     with open(folder_addr + '/' + file.name, 'wb+') as destination:
                         for chunk in file.chunks():
                             destination.write(chunk)
 
-            return redirect(add_reports)
+                except Exception as e:
+                    errors.append({
+                        "file": file.name,
+                        "message": str(e),
+                    })
+
+            context = {
+                'files_count': len(files),
+                'reports_add_count': reports_add_count,
+                'reports_update_count': len(files) - reports_add_count - len(errors),
+                'errors': errors,
+                'student_report_form': StudentReportForm,
+            }
+            return render(request, 'add_reports.html', context)
 
         return HttpResponse(form.errors.items())
 
