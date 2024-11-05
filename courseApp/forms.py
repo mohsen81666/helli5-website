@@ -19,15 +19,15 @@ class MultipleFileField(forms.FileField):
 
 
 class StudentReportForm(forms.Form):
-    report_title = forms.ChoiceField()  # Initializes in __init__
+    report = forms.ChoiceField()  # Initializes in __init__
     files = MultipleFileField(required=True, label='',
                               help_text="<br>نام فایلها باید شماره دانش آموزی باشد با یکی از فرمتهای png , jpg , pdf." +
                                         "<br>انتخاب فایلها در تعداد کمتر، امکان رخداد خطا را کم می کند.")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        report_titles = [(s.title, s.title + '(' + s.grade + '/' + s.field + ')') for s in Report.objects.all()]
-        self.fields['report_title'] = forms.ChoiceField(required=True, label='عنوان کارنامه',
-                                                        choices=report_titles,
+        reports = [(s.id, s.title + '(' + s.grade + '/' + s.field + ')') for s in Report.objects.all()]
+        self.fields['report'] = forms.ChoiceField(required=True, label='عنوان کارنامه',
+                                                        choices=reports,
                                                         help_text="برای اضافه کردن عنوان جدید به بخش ادمین مراجعه کنید.")
 

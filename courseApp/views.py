@@ -67,8 +67,8 @@ def add_reports(request):
     if request.method == "POST":
         form = StudentReportForm(request.POST, request.FILES)
         if form.is_valid():
-            report_title = form.cleaned_data['report_title']
-            report = Report.objects.get(title=report_title)
+            report_id = form.cleaned_data['report']
+            report = Report.objects.get(id=report_id)
             files = request.FILES.getlist('files')
 
             folder = 'reports/' + str(report.id)

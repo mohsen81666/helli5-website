@@ -20,7 +20,7 @@
                 <form method="post" enctype="multipart/form-data" action="{% url 'add-reports' %}">
                     {% csrf_token %}
                     <div class="">
-                        {{ student_report_form.report_title|as_crispy_field }}
+                        {{ student_report_form.report|as_crispy_field }}
                     </div>
                     <div class="py-4">
                         {{ student_report_form.files|as_crispy_field }}
