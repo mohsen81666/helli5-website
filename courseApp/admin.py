@@ -24,7 +24,7 @@ class ReportAdmin(admin.ModelAdmin):
 
 @admin.register(StudentReport)
 class StudentReportAdmin(admin.ModelAdmin):
-    list_display = ('student', 'get_name', 'get_report', 'show_to_student')
+    list_display = ('student', 'get_name', 'report', 'show_to_student')
     list_editable= ('show_to_student',)
     list_filter = ('report',)
     search_fields = ('student',)
@@ -32,10 +32,6 @@ class StudentReportAdmin(admin.ModelAdmin):
     def get_name(self, obj):
             return obj.student.user.first_name + ' ' + obj.student.user.last_name
     get_name.short_description = 'Name'
-
-    def get_report(self, obj):
-            return obj.report.title + '(' + obj.report.grade + '/' + obj.report.field + ')'
-    get_report.short_description = 'Report'
 
 
 # Register your models here.

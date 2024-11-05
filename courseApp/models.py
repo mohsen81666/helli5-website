@@ -99,7 +99,7 @@ class Report(models.Model):
     date = jmodels.jDateField(null=False, blank=False)
 
     def __str__(self):
-        return self.title
+        return f"{self.title}({self.grade}/{self.field})"
 
 
 class StudentReport(models.Model):
