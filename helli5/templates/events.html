@@ -16,7 +16,7 @@
     <table class="table table-striped">
         {% for event in past_events %}
         {% ifchanged event.date.month %}
-        <tr class="table-muted">
+        <tr class="table-info">
             <th colspan='2' class="text-center">{{ event.date.month|persian_month_name }}</th>
         </tr>
         {% endifchanged %}
@@ -34,7 +34,7 @@
     </table>
     <hr />
     <table class="table table-striped">
-        <tr class="table-info">
+        <tr class="bg-success">
             <th colspan='2' class="text-center">{{ current_events.0.date.month|persian_month_name }}</th>
         </tr>
         {% for event in current_events %}
@@ -54,7 +54,7 @@
     <table class="table table-striped">
         {% for event in future_events %}
         {% ifchanged event.date.month %}
-        <tr class="table-primary">
+        <tr class="bg-info">
             <th colspan='2' class="text-center">{{ event.date.month|persian_month_name }}</th>
         </tr>
         {% endifchanged %}
