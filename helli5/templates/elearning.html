@@ -8,28 +8,13 @@
 
 <main class="p-3">
 
-    <div class="card text-center">
-        <div class="card-header">
-            کلاس های آنلاین
-        </div>
-        <div class="card-body">
-            <h5 class="card-title text-center">Adobe Connect</h5>
-            <figure class="figure">
-                <img src="{% static '/images/adobe-connect-logo.png' %}" class="elearning_logo figure-img img-fluid rounded" alt="ادوبی کانکت">
-                <figcaption class="figure-caption card-text text-center">
-                    از نرم افزار ادوبی کانکت، جهت برگزاری کلاس ها، وبینارها و آموزش الکترونیک دبیرستان علامه حلی ۵
-                    استفاده می‌شود.
-                </figcaption>
-            </figure>
-            <div style="margin-bottom: 15px">
-                <li>اشتراک گذاری صوت و تصویر آنلاین</li>
-                <li>ضبط اتوماتیک کلاس ها</li>
-                <li>حضور و غیاب مکانیزه</li>
-                <li>مشارکت کلاسی از طریق گفتگو، طرح پرسش و نظرسنجی</li>
-            </div>
-        </div>
+    {% comment %} {% if perms.loginApp.check_classes %} {% endcomment %}
+    <div class="text-center mb-3">
+        <a href="{% url 'eLearning:check_online_classes' %}" class="btn btn-secondary">حضور و غیاب</a>
     </div>
-    <div class="card text-center" style="margin-top: 10px">
+    {% comment %} {% endif %} {% endcomment %}
+
+    <div class="card text-center">
         <div class="card-header">
             مدیریت دروس و تکالیف
         </div>
@@ -38,8 +23,7 @@
             <figure class="figure">
                 <img src="{% static '/images/moodle-logo.png' %}" class="elearning_logo figure-img img-fluid rounded" alt="مودل">
                 <figcaption class="figure-caption card-text text-center">
-                    بهره گیری از درس افزار مودل در دبیرستان علامه حلی ۵، به ایجاد فضای تعاملی بین دبیران و دانش
-                    آموزان کمک می کند.
+                    بهره گیری از درس افزار مودل در دبیرستان علامه حلی ۵، به ایجاد فضای تعاملی بین دبیران و دانش آموزان کمک می کند.
                 </figcaption>
             </figure>
             <div style="margin-bottom: 15px">
@@ -48,7 +32,28 @@
                 <li>برگزاری آزمون های تستی و تشریحی</li>
                 <li>مشاهده ی نمره ها و بازخورد دبیران</li>
             </div>
-            <a href="{{ moodle_url }}" class="btn btn-outline-dark">سامانه دروس حلی۵</a>
+            <a href="{{ moodle_url }}" class="btn btn-outline-dark">سامانه دروس حلی ۵</a>
+        </div>
+    </div>
+    <div class="card text-center" style="margin-top: 10px">
+        <div class="card-header">
+            کلاس های آنلاین
+        </div>
+        <div class="card-body">
+            <h5 class="card-title text-center">Adobe Connect</h5>
+            <figure class="figure">
+                <img src="{% static '/images/adobe-connect-logo.png' %}" class="elearning_logo figure-img img-fluid rounded" alt="ادوبی کانکت">
+                <figcaption class="figure-caption card-text text-center">
+                    از نرم افزار ادوبی کانکت، جهت برگزاری کلاس ها، وبینارها و آموزش الکترونیک دبیرستان علامه حلی ۵ استفاده می‌شود.
+                </figcaption>
+            </figure>
+            <div style="margin-bottom: 15px">
+                <li>اشتراک گذاری صوت و تصویر آنلاین</li>
+                <li>ضبط اتوماتیک کلاس ها</li>
+                <li>حضور و غیاب مکانیزه</li>
+                <li>مشارکت کلاسی از طریق گفتگو، طرح پرسش و نظرسنجی</li>
+            </div>
+            <a href="{{ adobe_connect_url }}" class="btn btn-outline-success">کلاس های آنلاین حلی ۵</a>
         </div>
     </div>
     <div class="card text-center" style="margin-top: 10px">
@@ -61,8 +66,7 @@
                 <a href="{{ telegram_url }}">
                     <img src="{% static '/images/telegram-logo.png' %}" class="elearning_logo figure-img img-fluid rounded" alt="تلگرام">
                 </a>
-                <img src="{% static '/images/bale-logo.png' %}" class="figure-img img-fluid rounded"
-                    style="height: 95px" alt="بله">
+                <img src="{% static '/images/bale-logo.png' %}" class="elearning_logo figure-img img-fluid rounded" alt="بله">
                 <figcaption class="figure-caption card-text text-center">
                     <h5 dir="ltr">@allamehelli5</h5><br>
                     جدیدترین اخبار و اطلاعیه های دبیرستان علامه حلی ۵، به صورت همگام سازی شده در پیام رسان های

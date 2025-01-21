@@ -1,6 +1,4 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from helli5 import settings
 from .models import *
 from .forms import *
 from postingApp.models import PostStuff, Event
@@ -9,7 +7,6 @@ from django.db.models import Q
 from dynamicApp.models import SliderContent
 from loginApp.forms import ContactForm
 import os
-import xlwt
 import jdatetime
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,13 +34,6 @@ def index(request):
     }
     return render(request, 'index.html', context)
 
-def elearning(request):
-    context = {
-        'moodle_url': 'https://lms.' + settings.SITE_URL,
-        'telegram_url': 'https://t.me/allamehelli5',
-        'aparat_url': 'https://www.aparat.com/allamehelli5',
-    }
-    return render(request, 'elearning.html', context)
 
 # def footer(request):
 #     events = Event.objects.order_by('-date')[0:6]
