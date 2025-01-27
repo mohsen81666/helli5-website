@@ -7,6 +7,17 @@ from django_jalali.db import models as jmodels
 User = get_user_model()
 
 
+# Auxiliary model to define user permissions without database table
+class UserPerms(models.Model):
+    class Meta:
+        managed = False  # No database table
+        default_permissions = () # disable "add", "change", "delete" and "view" default permissions
+
+        permissions = (
+            # ('check_online_classes', 'Check Online Classes'),
+        )
+
+
 # General profile for all users
 class Profile(models.Model):
     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
