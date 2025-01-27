@@ -3,6 +3,7 @@ django-crispy-forms==1.9.1
 django-jalali==6.0.1
 django-richtextfield==1.6.1
 django-tinymce==3.6.1
+django-environ==0.11.1
 asgiref
 certifi==2020.6.20
 chardet==3.0.4

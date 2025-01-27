@@ -96,6 +96,9 @@ First, clone the repository to your local machine:
 ```
 $ git clone https://github.com/mohsen81666/helli5-website.git
 ```
+
+Add .env file with required data to the project root
+
 Create the database
 ```
 $ python manage.py makemigrations
