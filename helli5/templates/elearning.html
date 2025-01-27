@@ -7,13 +7,6 @@
 {% block content %}
 
 <main class="p-3">
-
-    {% comment %} {% if perms.loginApp.check_classes %} {% endcomment %}
-    <div class="text-center mb-3">
-        <a href="{% url 'eLearning:check_online_classes' %}" class="btn btn-secondary">حضور و غیاب</a>
-    </div>
-    {% comment %} {% endif %} {% endcomment %}
-
     <div class="card text-center">
         <div class="card-header">
             مدیریت دروس و تکالیف

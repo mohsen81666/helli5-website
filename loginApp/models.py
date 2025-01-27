@@ -14,7 +14,7 @@ class UserPerms(models.Model):
         default_permissions = () # disable "add", "change", "delete" and "view" default permissions
 
         permissions = (
-            # ('check_online_classes', 'Check Online Classes'),
+            ('check_online_classes', 'Check Online Classes'),
         )
 
 

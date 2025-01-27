@@ -1,108 +1,107 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block title %} حضور و غیاب | وبسایت دبیرستان دوره دوم علامه حلی ۵ تهران {% endblock %}
+
 {% block content %}
+<header class="hero">
+    <div class="hero-image" style="background-image: url({% static '/images/کتابخانه-دبیرستان-علامه-حلی۵.jpg' %})"></div>
+    <h1 class="display-3">
+        پنل کاربری
+        ({{ user.first_name }} {{ user.last_name }})
+    </h1>
+</header>
 
-    <hr>
+<section>
+    <div class="container py5">
+        <div class="row d-flex align-items-stretch no-gutters order-md-last">
 
-    <section dir="rtl" class="ftco-section ftco-no-pt ftc-no-pb">
-        <div class="container text-center" style="padding-bottom: 20px">
-            <div dir="ltr" class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                <div class="btn-group" role="group">
-                    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        دهم
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=1&class=10">زنگ۱</a>
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=2&class=10">زنگ۲</a>
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=3&class=10">زنگ۳</a>
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=4&class=10">زنگ۴</a>
-                    </div>
-                </div>
-                <div class="btn-group" role="group">
-                    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        یازدهم
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=1&class=11">زنگ۱</a>
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=2&class=11">زنگ۲</a>
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=3&class=11">زنگ۳</a>
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=4&class=11">زنگ۴</a>
-                    </div>
-                </div>
-                <div class="btn-group" role="group">
-                    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        دوازدهم
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=1&class=12">زنگ۱</a>
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=2&class=12">زنگ۲</a>
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=3&class=12">زنگ۳</a>
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=4&class=12">زنگ۴</a>
-                    </div>
-                </div>
-                <div class="btn-group" role="group">
-                    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        زبان
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=1&class=zaban">زنگ۱</a>
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=2&class=zaban">زنگ۲</a>
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=3&class=zaban">زنگ۳</a>
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=4&class=zaban">زنگ۴</a>
-                    </div>
-                </div>
-                <div class="btn-group" role="group">
-                    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        وبینار
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=1&class=webinar">زنگ۱</a>
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=2&class=webinar">زنگ۲</a>
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=3&class=webinar">زنگ۳</a>
-                        <a class="dropdown-item" href="{% url 'eLearning:check_online_classes' %}?zang=4&class=webinar">زنگ۴</a>
-                    </div>
-                </div>
+            {% include 'user_sidebar.html' %}
 
-            </div>
-            <br>
-            {#            {{ response }}#}
-            <table class="table table-hover  m-auto">
-                <thead><strong>لیست حضور و غیاب آنلاین زنگ {{ request.GET.zang }} کلاسهای {{ request.GET.class }}
-                    ام</strong>
-                <th>کد دانش آموزی</th>
-                <th>نام و نام خانوادگی</th>
-                <th>مدت زمان حضور</th>
-                <th>وضعیت</th>
-                <th>موبایل مادر</th>
-                <th>موبایل دانش آموز</th>
-                </thead>
-                <tbody>
-                {#                {{ response }}#}
+            <div class="col-md-9 p-4 bg-light" style="border-radius: 20px">
+
+                {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+                {% endif %}
+
+                <form action="{% url 'eLearning:check_online_classes' %}" method="get">
+                    <div class="row align-text-center">
+                        <div class="col-3">
+                            <input type="text" name="date" value="{{ request.GET.date }}" placeholder="تاریخ" data-jdp class="form-control" onkeydown="return false"></input>
+                        </div>
+                        <div class="col-2">
+                            <select class="form-control" name="grade" id="grade" required>
+                                <option value="" selected disabled>پایه</option>
+                                <option value="10" {% if request.GET.grade == '10'%}selected{%endif%}>دهم</option>
+                                <option value="11" {% if request.GET.grade == '11'%}selected{%endif%}>یازدهم</option>
+                                <option value="12" {% if request.GET.grade == '12'%}selected{%endif%}>دوازدهم</option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <select class="form-control" name="field" id="field" required>
+                                <option value="" selected disabled>رشته</option>
+                                <option value="R" {% if request.GET.field == 'R'%}selected{% endif %}>ریاضی</option>
+                                <option value="T" {% if request.GET.field == 'T'%}selected{% endif %}>تجربی</option>
+                                <option value="E" {% if request.GET.field == 'E'%}selected{% endif %}>انسانی</option>
+                                <option value="RTE" {% if request.GET.field == 'RTE'%}selected{% endif %}>ادغامی سه رشته</option>
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <select class="form-control" name="zang" id="zang" required>
+                                <option value="" selected disabled>زنگ</option>
+                                <option value="1" {% if request.GET.zang == '1'%}selected{%endif%}>زنگ اول</option>
+                                <option value="2" {% if request.GET.zang == '2'%}selected{%endif%}>زنگ دوم</option>
+                                <option value="3" {% if request.GET.zang == '3'%}selected{%endif%}>زنگ سوم</option>
+                                <option value="4" {% if request.GET.zang == '4'%}selected{%endif%}>زنگ چهارم</option>
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <button type="submit" class="btn btn-primary btn-block">حضوروغیاب</button>
+                        </div>
+                    </div>
+                </form>
                 <br>
-                {% for key, value in response.items %}
-                    <tr class="{% if value.check == False %}table-danger{% endif %}"
-                        style="cursor: pointer" ;
-                        onclick="window.location='';">
-                        <td>{{ value.id }}</td>
-                        <td>{{ value.name }}</td>
-                        <td dir="ltr">{% if value.check == False %}-{% else %}
-                            {{ value.out|timeuntil:value.in }}{% endif %}</td>
-                        <td dir="ltr">{% if value.check == False %}غایب{% else %}{{ value.in|date:'H:i' }} -
-                            {{ value.out|date:'H:i' }}{% endif %}</td>
-                        <td>{{ value.mom_phone }}</td>
-                        <td>{{ value.student_phone }}</td>
-                    </tr>
-                {% endfor %}
 
-                </tbody>
-            </table>
+                {% if request.GET.grade %}
+                    {% if not class_names %}
+                        <h3 class="text-center">کلاسی برگزار نشده است</h3>
+                    {% else %}
+                        <div class="card text-center mb-3" style="padding-bottom: 20px">
+                            <table class="table table-hover  m-auto">
+                            <thead><strong>لیست حضور و غیاب {{ class_names }}</strong>
+                                <th>کد دانش آموزی</th>
+                                <th>نام و نام خانوادگی</th>
+                                <th>مدت زمان حضور</th>
+                                <th>اولین ورود</th>
+                                <th>آخرین خروج</th>
+                                <th>تعداد اتصال</th>
+                            </thead>
+                            <tbody>
+                            <br>
+                            {% for key, item in checks.items %}
+                                <tr class="{% if item.check == False %}table-danger{% endif %}">
+                                    <td>{{ key }}</td>
+                                    <td>{{ item.family }}, {{ item.name }}</td>
+                                    {% if item.check == True %}
+                                        <td>{{ item.interval }} دقیقه</td>
+                                        <td>{{ item.first_in|date:'H:i' }}</td>
+                                        <td>{{ item.last_out|date:'H:i' }}</td>
+                                        <td>{{ item.attendance_no }}</td>
+                                    {% else %}
+                                        <td colspan=4>غایب</td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
 
         </div>
-    </section>
+    </div>
+</section>
 {% endblock %}

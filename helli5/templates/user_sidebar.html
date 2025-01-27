@@ -17,6 +17,11 @@
                 <a href="{% url 'add-reports' %}">بارگذاری کارنامه‌ها</a>
             </li>
             {% endif %}
+            {% if perms.loginApp.check_online_classes %}
+            <li class="card-link">
+                <a href="{% url 'eLearning:check_online_classes' %}">حضور و غیاب کلاسهای آنلاین</a>
+            </li>
+            {% endif %}
             {% if perms.loginApp.add_profile %}
             <li class="card-link">
                 <a href="{% url 'user-bunch-add' %}">اضافه کردن گروهی کاربرها</a>
