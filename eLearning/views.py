@@ -157,7 +157,7 @@ def check_online_classes(request):
 
 
     # Authentication
-    response = requests.get('https://class.allamehelli5edu.ir/api/xml?action=login' + 
+    response = requests.get('https://class.allamehelli5edu.ir/api/xml?action=login' +
                             '&login=' + settings.ADOBE_CONNECT_USER +
                             '&password=' + settings.ADOBE_CONNECT_PASSWORD)
     response_content = xmltodict.parse(response.content)
