@@ -136,10 +136,10 @@ def check_online_classes(request):
         },
     }
     class_times = {
-        '1': { 'start': '8:00:00', 'end': '9:00:00'},
-        '2': { 'start': '9:30:00', 'end': '10:30:00'},
-        '3': { 'start': '11:00:00', 'end': '12:00:00'},
-        '4': { 'start': '12:30:00', 'end': '13:30:00'},
+        '1': { 'start': '8:20:00', 'end': '9:35:00'},
+        '2': { 'start': '9:50:00', 'end': '11:05:00'},
+        '3': { 'start': '11:20:00', 'end': '12:35:00'},
+        '4': { 'start': '12:55:00', 'end': '14:05:00'},
     }
 
     request_date = request.GET.get('date')
@@ -202,16 +202,28 @@ def check_online_classes(request):
             checks[id]['check'] = False
         else:
             checks[id]['check'] = True
+
             checks[id]['first_in'] = datetime.strptime(
                     attendances[0]['date-created'].split('T')[1].split('.')[0],
                     '%H:%M:%S')
-            checks[id]['last_out'] = datetime.strptime(
-                    attendances[len(attendances)-1]['date-end'].split('T')[1].split('.')[0],
-                    '%H:%M:%S')
+
+            if 'date-end' in attendances[len(attendances)-1].keys():
+                checks[id]['last_out'] = datetime.strptime(
+                        attendances[len(attendances)-1]['date-end'].split('T')[1].split('.')[0],
+                        '%H:%M:%S')
+            else:
+                checks[id]['last_out'] = datetime.now()
+
             interval = 0
             for att in attendances:
-                interval += round((datetime.fromisoformat(att['date-end']) - datetime.fromisoformat(att['date-created'])).total_seconds() / 60)
+                att_start = datetime.fromisoformat(att['date-created']).replace(tzinfo=None)
+                if 'date-end' in att.keys():
+                    att_end = datetime.fromisoformat(att['date-end']).replace(tzinfo=None)
+                else:
+                    att_end = datetime.now().replace(tzinfo=None)
+                interval += round((att_end - att_start).total_seconds() / 60)
             checks[id]['interval'] = interval
+
             checks[id]['attendance_no'] = len(attendances)
 
     return render(request, 'pa_page.html',
