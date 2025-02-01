@@ -35,6 +35,8 @@ DEBUG = True
 ALLOWED_HOSTS = ['www.allamehelli5edu.ir', 'allamehelli5edu.ir', '37.152.189.163']
 # ALLOWED_HOSTS = ['127.0.0.1']
 
+CSRF_TRUSTED_ORIGINS = ['https://www.allamehelli5edu.ir', 'https://allamehelli5edu.ir']
+
 # Adobe Connect credentials
 ADOBE_CONNECT_USER = env('ADOBE_CONNECT_USER')
 ADOBE_CONNECT_PASSWORD = env('ADOBE_CONNECT_PASSWORD')
