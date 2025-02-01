@@ -136,10 +136,10 @@ def check_online_classes(request):
         },
     }
     class_times = {
-        '1': { 'start': '8:20:00', 'end': '9:35:00'},
-        '2': { 'start': '9:50:00', 'end': '11:05:00'},
-        '3': { 'start': '11:20:00', 'end': '12:35:00'},
-        '4': { 'start': '12:55:00', 'end': '14:05:00'},
+        '1': { 'start': '8:15:00', 'end': '9:30:00'},
+        '2': { 'start': '9:45:00', 'end': '11:00:00'},
+        '3': { 'start': '11:15:00', 'end': '12:30:00'},
+        '4': { 'start': '12:45:00', 'end': '14:00:00'},
     }
 
     request_date = request.GET.get('date')
@@ -198,6 +198,7 @@ def check_online_classes(request):
             'family': student.user.last_name,
         }
         attendances = [att for att in attendants if 'login' in att and att['login'] == str(id)]
+        attendances = sorted(attendances, key=lambda d: d['date-created'])
         if len(attendances) == 0:
             checks[id]['check'] = False
         else:
