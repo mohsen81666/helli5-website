@@ -186,9 +186,12 @@ def check_online_classes(request):
             '&session=' + breeze_session)
         response_content = xmltodict.parse(xml_response.content)
         if response_content['results']['report-meeting-attendance']:
-            class_names += '«' + response_content['results']['report-meeting-attendance']['row'][0]['sco-name'] + '»'
-            for att in response_content['results']['report-meeting-attendance']['row']:
-                attendants.append(att)
+            try:  # Some meeting reports lacks information
+                class_names += '«' + response_content['results']['report-meeting-attendance']['row'][0]['sco-name'] + '»'
+                for att in response_content['results']['report-meeting-attendance']['row']:
+                    attendants.append(att)
+            except:
+                pass
 
     checks = {}
     for student in students:
