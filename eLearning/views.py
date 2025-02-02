@@ -213,7 +213,7 @@ def check_online_classes(request):
                         attendances[len(attendances)-1]['date-end'].split('T')[1].split('.')[0],
                         '%H:%M:%S')
             else:
-                checks[id]['last_out'] = datetime.now()
+                checks[id]['last_out'] = None
 
             interval = 0
             for att in attendances:

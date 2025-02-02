@@ -87,7 +87,11 @@
                                     {% if item.check == True %}
                                         <td>{{ item.interval }} دقیقه</td>
                                         <td>{{ item.first_in|date:'H:i' }}</td>
-                                        <td>{{ item.last_out|date:'H:i' }}</td>
+                                        {% if item.last_out %}
+                                            <td>{{ item.last_out|date:'H:i' }}</td>
+                                        {% else %}
+                                            <td>---</td>
+                                        {% endif %}
                                         <td>{{ item.attendance_no }}</td>
                                     {% else %}
                                         <td colspan=4>غایب</td>
