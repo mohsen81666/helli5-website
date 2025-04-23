@@ -3,13 +3,13 @@ from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.urls import reverse
 from loginApp.models import Subscriber, Profile
-from postingApp.models import PostStuff
+from postingApp.models import BlogPost
 
 
 class SliderContent(models.Model):
     title = models.CharField(max_length=70, blank=True, null=True)
     description = models.CharField(max_length=150, blank=True, null=True)
-    post = models.ForeignKey(PostStuff, related_name='post', on_delete=models.CASCADE, blank=True, null=True)
+    post = models.ForeignKey(BlogPost, related_name='post', on_delete=models.CASCADE, blank=True, null=True)
     img = models.ImageField(upload_to='slider-photos', blank=True, null=True)
     visible = models.BooleanField(default=True)
     date = models.DateTimeField(auto_now_add=True)

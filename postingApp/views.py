@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from .forms import PageForm, CommentForm
 from django.utils.timezone import now
-from .models import PostStuff, Comment, Category, Profile, Event
+from .models import BlogPost, Comment, Category, Profile, Event
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models.functions import Extract
@@ -13,8 +13,8 @@ import jdatetime
 
 
 # def get_archive_count():
-#     #months = PostStuff.objects.annotate(month_stamp=Extract('time_stamp', 'month')).values_list('month_stamp', flat=True)
-#     queryset = PostStuff.objects.values('date').annotate(Count('d'))
+#     #months = BlogPost.objects.annotate(month_stamp=Extract('time_stamp', 'month')).values_list('month_stamp', flat=True)
+#     queryset = BlogPost.objects.values('date').annotate(Count('d'))
 #
 #     return months
 
@@ -25,7 +25,7 @@ import jdatetime
 
 
 def search(request):
-    queryset = PostStuff.objects.all()
+    queryset = BlogPost.objects.all()
     query = request.GET.get('search')
     if query:
         queryset = queryset.filter(Q(title__icontains=query) |
@@ -38,7 +38,7 @@ def search(request):
 
 
 # def modir(request):
-#     q = PostStuff.objects.all()
+#     q = BlogPost.objects.all()
 #     tag = request.GET.get('tag')
 #     if tag:
 #         q = q.filter(Q(categories__title__exact =tag)).distinct()
@@ -52,9 +52,9 @@ def blog(request, tag=None):
     categories = Category.objects.all()
 
     if tag:
-        post_list = PostStuff.objects.filter(Q(categories__title__exact=tag)).distinct()
+        post_list = BlogPost.objects.filter(Q(categories__title__exact=tag)).distinct()
     else:
-        post_list = PostStuff.objects.all()
+        post_list = BlogPost.objects.all()
 
     paginator = Paginator(post_list, 20)
     page_request_var = 'page'
@@ -66,7 +66,7 @@ def blog(request, tag=None):
     except EmptyPage:
         paginated_queryset = paginator.page(paginator.num_pages)
 
-    featured_posts = PostStuff.objects.filter(featured=True)[:5]
+    featured_posts = BlogPost.objects.filter(featured=True)[:5]
 
     context = {
         'queryset': paginated_queryset,
@@ -80,9 +80,9 @@ def blog(request, tag=None):
 
 
 def blog_single(request, slug):
-    post = get_object_or_404(PostStuff, slug=slug)
+    post = get_object_or_404(BlogPost, slug=slug)
     categories = Category.objects.all()
-    featured_posts = PostStuff.objects.filter(featured=True)[:5]
+    featured_posts = BlogPost.objects.filter(featured=True)[:5]
     form = CommentForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
@@ -112,7 +112,7 @@ def get_author(user):
 
 def blog_update(request, slug):
     title = 'Update'
-    post = get_object_or_404(PostStuff, slug=slug)
+    post = get_object_or_404(BlogPost, slug=slug)
     form = PageForm(request.POST or None, request.FILES or None, instance=post)
     author = get_author(request.user.profile)
     if request.method == "POST":
@@ -130,7 +130,7 @@ def blog_update(request, slug):
 
 
 def blog_delete(request, slug):
-    post = get_object_or_404(PostStuff, slug=slug)
+    post = get_object_or_404(BlogPost, slug=slug)
     post.delete()
     return redirect(reverse("blog"))
 

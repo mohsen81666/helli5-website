@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import *
 from .forms import *
-from postingApp.models import PostStuff, Event
+from postingApp.models import BlogPost, Event
 from loginApp.models import Contact, TeacherProfile, TeachingDepartment
 from django.db.models import Q
 from dynamicApp.models import SliderContent
@@ -25,7 +25,7 @@ def index(request):
     #         except Exception:
     #             pass
     slider_contents = SliderContent.objects.filter(Q(visible=True)).order_by('-date')[0:6]
-    latest = PostStuff.objects.order_by('-date')[0:6]
+    latest = BlogPost.objects.order_by('-date')[0:6]
     events = Event.objects.filter(date__gte=jdatetime.date.today()).order_by('date')
     context = {
         'latest_posts': latest,

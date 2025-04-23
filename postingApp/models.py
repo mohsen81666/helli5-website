@@ -18,16 +18,16 @@ class Category(models.Model):
 
     # @property
     # def get_posts(self):
-    #     posts = [post for post in PostStuff.objects.all() if self in post.categories.all()]
+    #     posts = [post for post in BlogPost.objects.all() if self in post.categories.all()]
     #     print("******* ", posts)
-    #     # for mpost in PostStuff.objects.all():
+    #     # for mpost in BlogPost.objects.all():
     #     #     for cat in mpost.categories:
     #     #         if self == cat:
     #     #             res.append(cat)
     #     return posts
 
 
-class PostStuff(models.Model):
+class BlogPost(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
     username = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -35,9 +35,9 @@ class PostStuff(models.Model):
     description = models.CharField(max_length=150, blank=True)
     img = models.ImageField(upload_to="thumbnails")
     date = jmodels.jDateTimeField(auto_now_add=True)
-    comment_count = models.IntegerField(default=0)
     categories = models.ManyToManyField(Category)
     featured = models.BooleanField(default=True)
+    # comment_count = models.IntegerField(default=0)
 
     class Meta:
         ordering = ["-date"]
@@ -60,12 +60,18 @@ class PostStuff(models.Model):
             'slug': self.slug
         })
 
-    @property
-    def get_comments(self):
-        return self.comments.all()
+    # @property
+    # def get_comments(self):
+    #     return self.comments.all()
 
-    def comment_count(self):
-        return Comment.objects.filter(post=self).count()
+    # def comment_count(self):
+    #     return Comment.objects.filter(post=self).count()
+
+def pre_save_post_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance)
+
+pre_save.connect(pre_save_post_receiver, sender=BlogPost)
 
 
 class Event(models.Model):
@@ -78,27 +84,8 @@ class Event(models.Model):
         return self.title
 
 
-# @receiver(post_save, sender=PostStuff)
-# def send_mail_to_subscribers(sender, instance, **kwargs):
-#     send_mail(
-#         instance.title,
-#         instance.text,
-#         'allamehelli5@ac.ir',
-#         [s.email for s in Subscriber.objects.all()],
-#         fail_silently=False,
-#     )
-
-
-def pre_save_post_receiver(sender, instance, *args, **kwargs):
-    if not instance.slug:
-        instance.slug = unique_slug_generator(instance)
-
-
-pre_save.connect(pre_save_post_receiver, sender=PostStuff)
-
-
 class Attachment(models.Model):
-    post = models.ForeignKey(PostStuff, on_delete=models.CASCADE)
+    post = models.ForeignKey(BlogPost, on_delete=models.CASCADE)
     attach = models.FileField(upload_to='uploads/%Y/%m/%d/')
 
     def __str__(self):
@@ -106,7 +93,7 @@ class Attachment(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(PostStuff, related_name='comments', on_delete=models.CASCADE)
+    post = models.ForeignKey(BlogPost, related_name='comments', on_delete=models.CASCADE)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     text = models.TextField(max_length=400)
     cm_date = jmodels.jDateTimeField(auto_now_add=True)

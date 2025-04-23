@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.db.models import Q
-from postingApp.models import PostStuff
+from postingApp.models import BlogPost
 from .models import Team, Pansouq, Transaction, Participant, Challenge
 
 
@@ -17,7 +17,7 @@ def students_list(request, challenge_id):
 
 
 def pansouq(request, pansouq_id):
-    post_list = PostStuff.objects.filter(Q(categories__title__exact='پژوهشی')).distinct()[:3]
+    post_list = BlogPost.objects.filter(Q(categories__title__exact='پژوهشی')).distinct()[:3]
     teams_list = Team.objects.filter(related_pansouq_id=pansouq_id)
     pansouq = Pansouq.objects.get(id=pansouq_id)
     max_points = Transaction.get_max_points()

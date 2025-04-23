@@ -1,6 +1,6 @@
 from django import forms
 from djrichtextfield.models import RichTextField
-from .models import PostStuff, Comment
+from .models import BlogPost, Comment
 
 
 class PageForm(forms.ModelForm):
@@ -12,7 +12,7 @@ class PageForm(forms.ModelForm):
     featured = forms.BooleanField()
 
     class Meta:
-        model = PostStuff
+        model = BlogPost
         fields = (
             'title',
             'text',

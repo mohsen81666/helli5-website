@@ -1,6 +1,6 @@
 from django.contrib.syndication.views import Feed
 from django.template.defaultfilters import truncatewords
-from .models import PostStuff
+from .models import BlogPost
 from django.urls import reverse
 
 
@@ -10,7 +10,7 @@ class LatestPostsFeed(Feed):
     description = "وبسایت دبیرستان پسرانه ی تیزهوشان دوره دوم علامه حلی ۵ تهران (سمپاد)"
 
     def items(self):
-        return PostStuff.objects.filter(featured=True)
+        return BlogPost.objects.filter(featured=True)
 
     def item_title(self, item):
         return item.title

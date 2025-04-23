@@ -4,8 +4,8 @@ import django_jalali.admin as jadmin
 from .models import *
 
 
-@admin.register(PostStuff)
-class PostStuffAdmin(admin.ModelAdmin):
+@admin.register(BlogPost)
+class BlogPostAdmin(admin.ModelAdmin):
     exclude = ('slug',)
     list_display = ('title', 'username', 'date', 'featured')
     search_fields = ('title',)
