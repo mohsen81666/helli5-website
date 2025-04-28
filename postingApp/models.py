@@ -15,16 +15,6 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
-    # @property
-    # def get_posts(self):
-    #     posts = [post for post in BlogPost.objects.all() if self in post.categories.all()]
-    #     print("******* ", posts)
-    #     # for mpost in BlogPost.objects.all():
-    #     #     for cat in mpost.categories:
-    #     #         if self == cat:
-    #     #             res.append(cat)
-    #     return posts
-
 
 class BlogPost(models.Model):
     title = models.CharField(max_length=100)
@@ -58,6 +48,17 @@ class BlogPost(models.Model):
         return reverse('blog_delete', kwargs={
             'slug': self.slug
         })
+
+
+    # @property
+    # def get_posts(self):
+    #     posts = [post for post in BlogPost.objects.all() if self in post.categories.all()]
+    #     print("******* ", posts)
+    #     # for mpost in BlogPost.objects.all():
+    #     #     for cat in mpost.categories:
+    #     #         if self == cat:
+    #     #             res.append(cat)
+    #     return posts
 
     # @property
     # def get_comments(self):

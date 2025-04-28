@@ -11,6 +11,12 @@ class BlogPostAdmin(admin.ModelAdmin):
     search_fields = ('title',)
     list_filter = ('featured',)
 
+    def save_model(self, request, obj, form, change):
+        user_prfile = Profile.objects.get(user=request.user)
+        obj.username = user_prfile
+        print(request.user)
+        super().save_model(request, obj, form, change)
+
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
