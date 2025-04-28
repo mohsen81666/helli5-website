@@ -23,7 +23,7 @@ class BlogPost(models.Model):
     text = CKEditor5Field('Text', config_name='extends')
     description = models.CharField(max_length=150, blank=True)
     img = models.ImageField(upload_to="thumbnails")
-    date = jmodels.jDateTimeField(auto_now_add=True)
+    date = jmodels.jDateTimeField()
     categories = models.ManyToManyField(Category)
     featured = models.BooleanField(default=True)
     # comment_count = models.IntegerField(default=0)
