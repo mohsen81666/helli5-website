@@ -48,8 +48,7 @@ urlpatterns = [
     path('pre-registeration/<melli>/<ssid>', pre_registeration, name='compelete_pre_registeration'),
     path('students_list/<challenge_id>/', students_list, name='pansouq_students'),
     # path('error503/', views.error503, name='error503'),
-    # path('djrichtextfield/', include('djrichtextfield.urls')),
-    re_path(r'^tinymce/', include('tinymce.urls')),
+    path("ckeditor5/", include('django_ckeditor_5.urls')),
 
     re_path(r'^accounts/', include('loginApp.urls')),
     re_path(r'^posts/', include('postingApp.urls')),

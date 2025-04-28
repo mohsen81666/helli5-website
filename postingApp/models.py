@@ -4,8 +4,7 @@ from django.db.models.signals import post_save, pre_save
 from django.urls import reverse
 from .utils import unique_slug_generator
 from loginApp.models import Subscriber, Profile
-from django.core.mail import send_mail
-from tinymce import models as tinymce_models
+from django_ckeditor_5.fields import CKEditor5Field
 from django_jalali.db import models as jmodels
 
 
@@ -31,7 +30,7 @@ class BlogPost(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
     username = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    text = tinymce_models.HTMLField()
+    text = CKEditor5Field('Text', config_name='extends')
     description = models.CharField(max_length=150, blank=True)
     img = models.ImageField(upload_to="thumbnails")
     date = jmodels.jDateTimeField(auto_now_add=True)
