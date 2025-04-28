@@ -11,6 +11,12 @@ class BlogPostAdmin(admin.ModelAdmin):
     search_fields = ('title',)
     list_filter = ('featured',)
 
+    def get_fields(self, request, obj=None):
+        fields = ['title','description','text', 'img', 'categories', 'featured', 'date']
+        if request.user.is_superuser:
+            fields.append('username')
+        return fields
+
     def save_model(self, request, obj, form, change):
         user_prfile = Profile.objects.get(user=request.user)
         obj.username = user_prfile
