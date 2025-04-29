@@ -4,7 +4,7 @@ from .views import *
 urlpatterns = [
 
     path('', blog, name='blog'),
-    path('تگ/<tag>', blog, name='blog'),
+    path('tag/<tag>', blog, name='blog'),
     # path('add_post_teacher/', add_post_teacher, name='add_post_teacher'),
     # path('add_post/', add_post, name='add_post'),
     path('جستجو/', search, name='search'),
