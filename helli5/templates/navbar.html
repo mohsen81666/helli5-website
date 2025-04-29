@@ -49,13 +49,7 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" id="navbarDropdown">آرشیو مطالب</a>
-                    <ul class="dropdown-menu bg-light">
-                        <li><a href="{% url 'blog' %}" class="dropdown-item">همه</a></li>
-                        <li><a href="{% url 'blog' tag='مدیریت' %}" class="dropdown-item">مدیریت</a></li>
-                        <li><a href="{% url 'blog' tag='آموزشی' %}" class="dropdown-item">آموزشی</a></li>
-                        <li><a href="{% url 'blog' tag='پژوهشی' %}" class="dropdown-item">پژوهشی</a></li>
-                        <li><a href="{% url 'blog' tag='المپیاد' %}" class="dropdown-item">المپیاد</a></li>
-                    </ul>
+                    {% get_post_categories %}
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'contact' %}">ارتباط با ما</a>

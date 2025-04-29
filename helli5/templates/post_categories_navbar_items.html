@@ -1,0 +1,6 @@
+<ul class="dropdown-menu bg-light">
+    <li><a href="{% url 'blog' %}" class="dropdown-item">همه</a></li>
+    {% for cat in categories %}
+        <li><a href="{% url 'blog' tag=cat.title %}" class="dropdown-item">{{ cat.title }}</a></li>
+    {% endfor %}
+</ul>
