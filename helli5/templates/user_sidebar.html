@@ -34,10 +34,7 @@
             {% endif %}
             {% if perms.loginApp.view_preregisteredstudent %}
             <li class="card-link">
-                <a href="{% url 'export-pres' %}">خروجی پیش ثبت نامی ها - کل</a>
-            </li>
-            <li class="card-link">
-                <a href="{% url 'export-pres-current' '2024' %}">خروجی پیش ثبت نامی ها - سال جاری</a>
+                <a href="{% url 'export_pre_registrations' %}">خروجی پیش ثبت نامی ها</a>
             </li>
             {% endif %}
             <li>

@@ -283,6 +283,7 @@ class PreRegisteredStudent(models.Model):
                                                     ],
                                                     )
 
+    #  اطلاعات ثبت فرم
     date_added = models.DateTimeField(auto_now_add=True)
     is_valid = models.BooleanField(default=False)
 

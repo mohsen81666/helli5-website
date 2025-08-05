@@ -8,5 +8,8 @@ urlpatterns = [
     re_path(r'set-own-password/', set_own_password, name='set-own-password'),
     re_path(r'change-user-password/', change_user_password, name='change-user-password'),
     re_path(r'bunch-add/', bunch_add, name='user-bunch-add'),
+    re_path(r'export-preregistrations/', export_pre_registrations, name='export_pre_registrations'),
+    re_path(r'export-preregistrations-excel/', get_pre_registrations_excel, name='get_pre_registrations_excel'),
+
     re_path(r'logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
 ]

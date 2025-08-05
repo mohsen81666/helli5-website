@@ -12,6 +12,8 @@ from django.views.decorators.csrf import csrf_protect
 import os
 import xlrd
 import xlwt
+from datetime import datetime, date
+import jdatetime
 from helli5.decorators import unauth_user
 from .models import *
 from .forms import *
@@ -278,101 +280,116 @@ def change_user_password(request):
     return render(request, 'change_user_password.html', context={'set_password_form': set_password_form})
 
 
-def export_pre_registrations(request, year=None):
+def export_pre_registrations(request):
     user = request.user
     if user.is_authenticated and user.username == 'admin':
-        response = HttpResponse(content_type='application/ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="users.xls"'
+        template = loader.get_template('pre_registration_export.html')
+    else:
+        template = loader.get_template('401.html')
+    return HttpResponse(template.render({'today': date.today()}, request))
 
-        wb = xlwt.Workbook(encoding='utf-8')
-        ws = wb.add_sheet('Users')
 
-        # Sheet header, first row
-        row_num = 0
-        font_style = xlwt.XFStyle()
-        font_style.font.bold = True
-        columns = ['نام', 'نام خانوادگی', 'نام پدر', 'روز تولد', 'ماه تولد', 'سال تولد',
-                   'کد ملی', 'سریال ۶رقمی شناسنامه', 'سری حروفی ش.', 'سری عددی ش.',
-                   'محل صدور', 'استان تولد', 'شهرستان تولد', 'دین', 'ملیت',
-                   'موبایل دانش آموز', 'ایمیل دانش آموز',
-                   'معدل کل پایه نهم', 'نام مدرسه‌ی قبلی', 
-                   'رشته‌ی تحصیلی', 'المپیادهای علمی', 'زمینه‌ی پژوهشی', 
-                   'ویژه ی ثبت نام شاهد', 'وضعیت جسمانی', 'چپ دست',
-                   'تحصیلات پدر', 'شغل پدر', 'آدرس محل کار پدر', 'تلفن محل کار پدر',
-                   'نام خانوادگی مادر', 'تحصیلات مادر', 'شغل مادر', 'آدرس محل کار مادر', 'تلفن محل کار مادر',
-                   'شماره موبایل پدر', 'شماره موبایل مادر',
-                   'آدرس منزل', 'کدپستی', 'تلفن منزل', 'وضعیت مسکن خانواده',
-                   'در خانواده با چه کسانی زندگی می کنید؟',
-                   'وضعیت مسکن دانش آموز در صورتی که برای تحصیل دور از خانواده زندگی می کند، چگونه است؟',
-                   'تعداد فرزندان خانواده', 'چندمین فرزند خانواده',
-                   'دانش آموز اتاق مستقل برای مطالعه دارد؟',
-                   ]
-        for col_num in range(len(columns)):
-            ws.write(row_num, col_num, columns[col_num], font_style)
+def get_pre_registrations_excel(request):
+    request_from_date = request.GET.get('from_date')
+    if request_from_date:
+        from_date_jalali = datetime.strptime(request_from_date , '%Y/%m/%d')
+        from_date = jdatetime.date(from_date_jalali.year, from_date_jalali.month, from_date_jalali.day).togregorian()
+    else:
+        from_date = jdatetime.date(1389, 7, 1).togregorian()
 
-        # Sheet body, remaining rows
-        font_style = xlwt.XFStyle()
+    request_to_date = request.GET.get('to_date')
+    if request_to_date:
+        to_date_jalali = datetime.strptime(request_to_date , '%Y/%m/%d')
+        to_date = jdatetime.date(to_date_jalali.year, to_date_jalali.month, to_date_jalali.day).togregorian()
+    else:
+        to_date = date.today()
 
-        if year is None:
-            rows = PreRegisteredStudent.objects.all()
-        else:
-            rows = PreRegisteredStudent.objects.filter(date_added__year=year)
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="users.xls"'
 
-        for row in rows:
-            row_num += 1
-            ws.write(row_num, 0, row.student_first_name, font_style)
-            ws.write(row_num, 1, row.student_last_name, font_style)
-            ws.write(row_num, 2, row.father_first_name, font_style)
-            ws.write(row_num, 3, row.birth_day, font_style)
-            ws.write(row_num, 4, row.birth_month, font_style)
-            ws.write(row_num, 5, row.birth_year, font_style)
-            ws.write(row_num, 6, row.melli_code, font_style)
-            ws.write(row_num, 7, row.ss_id, font_style)
-            ws.write(row_num, 8, row.ss_alphabetical, font_style)
-            ws.write(row_num, 9, row.ss_numerical, font_style)
-            ws.write(row_num, 10, row.export_place, font_style)
-            ws.write(row_num, 11, row.birth_place_state, font_style)
-            ws.write(row_num, 12, row.birth_place_town, font_style)
-            ws.write(row_num, 13, row.religion, font_style)
-            ws.write(row_num, 14, row.nationality, font_style)
-            ws.write(row_num, 15, row.student_phone, font_style)
-            ws.write(row_num, 16, row.student_mail, font_style)
-            ws.write(row_num, 17, row.grade_at_9th, font_style)
-            ws.write(row_num, 18, row.last_year_school_name, font_style)
-            ws.write(row_num, 19, row.field_of_study, font_style)
-            ws.write(row_num, 20, row.field_of_olympiad, font_style)
-            ws.write(row_num, 21, row.field_of_pajohesh, font_style)
-            ws.write(row_num, 22, row.shahed_in_all_schools, font_style)
-            ws.write(row_num, 23, row.physical_situation, font_style)
-            ws.write(row_num, 24, row.left_handed, font_style)
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Users')
 
-            ws.write(row_num, 25, row.father_edu, font_style)
-            ws.write(row_num, 26, row.father_job, font_style)
-            ws.write(row_num, 27, row.father_job_place, font_style)
-            ws.write(row_num, 28, row.father_job_phone, font_style)
-            ws.write(row_num, 29, row.mother_family, font_style)
-            ws.write(row_num, 30, row.mother_edu, font_style)
-            ws.write(row_num, 31, row.mother_job, font_style)
-            ws.write(row_num, 32, row.mother_job_place, font_style)
-            ws.write(row_num, 33, row.mother_job_phone, font_style)
-            ws.write(row_num, 34, row.father_phone, font_style)
-            ws.write(row_num, 35, row.mother_phone, font_style)
-            ws.write(row_num, 36, row.home_location, font_style)
-            ws.write(row_num, 37, row.home_postal_code, font_style)
-            ws.write(row_num, 38, row.home_phone, font_style)
-            ws.write(row_num, 39, row.home_situation, font_style)
+    # Sheet header, first row
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['نام', 'نام خانوادگی', 'نام پدر', 'روز تولد', 'ماه تولد', 'سال تولد',
+                'کد ملی', 'سریال ۶رقمی شناسنامه', 'سری حروفی ش.', 'سری عددی ش.',
+                'محل صدور', 'استان تولد', 'شهرستان تولد', 'دین', 'ملیت',
+                'موبایل دانش آموز', 'ایمیل دانش آموز',
+                'معدل کل پایه نهم', 'نام مدرسه‌ی قبلی',
+                'رشته‌ی تحصیلی', 'المپیادهای علمی', 'زمینه‌ی پژوهشی',
+                'ویژه ی ثبت نام شاهد', 'وضعیت جسمانی', 'چپ دست',
+                'تحصیلات پدر', 'شغل پدر', 'آدرس محل کار پدر', 'تلفن محل کار پدر',
+                'نام خانوادگی مادر', 'تحصیلات مادر', 'شغل مادر', 'آدرس محل کار مادر', 'تلفن محل کار مادر',
+                'شماره موبایل پدر', 'شماره موبایل مادر',
+                'آدرس منزل', 'کدپستی', 'تلفن منزل', 'وضعیت مسکن خانواده',
+                'در خانواده با چه کسانی زندگی می کنید؟',
+                'وضعیت مسکن دانش آموز در صورتی که برای تحصیل دور از خانواده زندگی می کند، چگونه است؟',
+                'تعداد فرزندان خانواده', 'چندمین فرزند خانواده',
+                'دانش آموز اتاق مستقل برای مطالعه دارد؟',
+                ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
 
-            ws.write(row_num, 40, row.homemate, font_style)
-            ws.write(row_num, 41, row.student_own_place, font_style)
-            ws.write(row_num, 42, row.family_children_counter, font_style)
-            ws.write(row_num, 43, row.this_child_counter, font_style)
-            ws.write(row_num, 44, row.student_have_reading_room, font_style)
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
 
-        wb.save(response)
-        return response
+    rows = PreRegisteredStudent.objects.filter(date_added__range=(from_date, to_date))
 
-    template = loader.get_template('401.html')
-    return HttpResponse(template.render({}, request))
+    for row in rows:
+        row_num += 1
+        ws.write(row_num, 0, row.student_first_name, font_style)
+        ws.write(row_num, 1, row.student_last_name, font_style)
+        ws.write(row_num, 2, row.father_first_name, font_style)
+        ws.write(row_num, 3, row.birth_day, font_style)
+        ws.write(row_num, 4, row.birth_month, font_style)
+        ws.write(row_num, 5, row.birth_year, font_style)
+        ws.write(row_num, 6, row.melli_code, font_style)
+        ws.write(row_num, 7, row.ss_id, font_style)
+        ws.write(row_num, 8, row.ss_alphabetical, font_style)
+        ws.write(row_num, 9, row.ss_numerical, font_style)
+        ws.write(row_num, 10, row.export_place, font_style)
+        ws.write(row_num, 11, row.birth_place_state, font_style)
+        ws.write(row_num, 12, row.birth_place_town, font_style)
+        ws.write(row_num, 13, row.religion, font_style)
+        ws.write(row_num, 14, row.nationality, font_style)
+        ws.write(row_num, 15, row.student_phone, font_style)
+        ws.write(row_num, 16, row.student_mail, font_style)
+        ws.write(row_num, 17, row.grade_at_9th, font_style)
+        ws.write(row_num, 18, row.last_year_school_name, font_style)
+        ws.write(row_num, 19, row.field_of_study, font_style)
+        ws.write(row_num, 20, row.field_of_olympiad, font_style)
+        ws.write(row_num, 21, row.field_of_pajohesh, font_style)
+        ws.write(row_num, 22, row.shahed_in_all_schools, font_style)
+        ws.write(row_num, 23, row.physical_situation, font_style)
+        ws.write(row_num, 24, row.left_handed, font_style)
+
+        ws.write(row_num, 25, row.father_edu, font_style)
+        ws.write(row_num, 26, row.father_job, font_style)
+        ws.write(row_num, 27, row.father_job_place, font_style)
+        ws.write(row_num, 28, row.father_job_phone, font_style)
+        ws.write(row_num, 29, row.mother_family, font_style)
+        ws.write(row_num, 30, row.mother_edu, font_style)
+        ws.write(row_num, 31, row.mother_job, font_style)
+        ws.write(row_num, 32, row.mother_job_place, font_style)
+        ws.write(row_num, 33, row.mother_job_phone, font_style)
+        ws.write(row_num, 34, row.father_phone, font_style)
+        ws.write(row_num, 35, row.mother_phone, font_style)
+        ws.write(row_num, 36, row.home_location, font_style)
+        ws.write(row_num, 37, row.home_postal_code, font_style)
+        ws.write(row_num, 38, row.home_phone, font_style)
+        ws.write(row_num, 39, row.home_situation, font_style)
+
+        ws.write(row_num, 40, row.homemate, font_style)
+        ws.write(row_num, 41, row.student_own_place, font_style)
+        ws.write(row_num, 42, row.family_children_counter, font_style)
+        ws.write(row_num, 43, row.this_child_counter, font_style)
+        ws.write(row_num, 44, row.student_have_reading_room, font_style)
+
+    wb.save(response)
+    return response
 
 
 # # Export user profiles

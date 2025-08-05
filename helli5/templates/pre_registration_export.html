@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_filters %}
+
+
+{% block content %}
+<header class="hero">
+    <div class="hero-image" style="background-image: url({% static '/images/کتابخانه-دبیرستان-علامه-حلی۵.jpg' %})"></div>
+    <h1 class="display-3">
+        پنل کاربری
+        ({{ user.first_name }} {{ user.last_name }})
+    </h1>
+</header>
+
+<section>
+    <div class="container py-5">
+        <div class="row d-flex align-items-stretch no-gutters order-md-last">
+            {% include 'user_sidebar.html' %}
+            <div class="col-md-9 p-4 p-md-5 bg-light" style="border-radius: 20px">
+                <h3 class="py-3">دریافت فایل پیش ثبت نامی ها</h3>
+                <form action="{% url 'get_pre_registrations_excel' %}" method="get">
+                    <div class="row align-text-center">
+                        <div class="col-5">
+                            <label for="from_date">از تاریخ</label>
+                            <input type="text" name="from_date" placeholder="شروع حلی 5" data-jdp class="form-control" onkeydown="return false"></input>
+                        </div>
+                        <div class="col-5">
+                            <label for="from_date">تا تاریخ</label>
+                            <input type="text" name="to_date" placeholder="امروز" data-jdp class="form-control" onkeydown="return false"></input>
+                        </div>
+                        <div class="col-2">
+                            <button type="submit" class="btn btn-primary btn-block my-4">دریافت فایل</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
