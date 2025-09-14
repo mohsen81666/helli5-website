@@ -25,10 +25,10 @@ def index(request):
     #         except Exception:
     #             pass
     slider_contents = SliderContent.objects.filter(Q(visible=True)).order_by('-date')[0:6]
-    latest = BlogPost.objects.order_by('-date')[0:6]
+    latest_featured = BlogPost.objects.filter(Q(featured=True)).order_by('-date')[0:6]
     events = Event.objects.filter(date__gte=jdatetime.date.today()).order_by('date')
     context = {
-        'latest_posts': latest,
+        'latest_featured_posts': latest_featured,
         'events': events,
         'slider_contents': slider_contents
     }

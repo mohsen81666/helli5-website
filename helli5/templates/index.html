@@ -38,7 +38,7 @@
             <div class="col">
                 <h2 class="h1 mb-4">نوشته‌ها</h2>
                 <div class="row g-3">
-                    {% for post in latest_posts %}
+                    {% for post in latest_featured_posts %}
                     <div class="col col-12 col-sm-6 col-md-4">
                         <div class="card border-0 shadow-sm bg-light overflow-hidden">
                             <a class="card-img-top ratio ratio-4x3" href="{{ post.get_absolute_url }}">
