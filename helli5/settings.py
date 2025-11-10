@@ -224,6 +224,19 @@ CKEDITOR_5_CONFIGS = {
         'htmlSupport': {
             'allow': [
                 {
+                    'name': 'div',
+                    'attributes': True,
+                    'classes': True,
+                    'styles': True,
+                },
+                {
+                    'name': 'span',
+                    'attributes': True,
+                    'classes': True,
+                    'styles': True,
+                    'inside': True
+                },
+                {
                     'name': 'iframe',
                     'attributes': True,
                     'classes': True,
