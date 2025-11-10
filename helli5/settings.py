@@ -218,6 +218,19 @@ CKEDITOR_5_CONFIGS = {
                     ],
             'shouldNotGroupWhenFull': 'true'
         },
+        'htmlEmbed': {
+            'showPreviews': True
+        },
+        'htmlSupport': {
+            'allow': [
+                {
+                    'name': 'iframe',
+                    'attributes': True,
+                    'classes': True,
+                    'styles': True
+                }
+            ]
+        },
         'alignment': {
             'options': [ 'left', 'center', 'right' ]
         },
